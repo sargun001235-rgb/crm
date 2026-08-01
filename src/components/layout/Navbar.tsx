@@ -11,12 +11,14 @@ export function Navbar() {
       {/* Mobile Hamburger Menu */}
       <div className="lg:hidden">
         <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="-ml-2">
-              <span className="sr-only">Open sidebar</span>
-              <Menu className="h-6 w-6" aria-hidden="true" />
-            </Button>
-          </SheetTrigger>
+          <SheetTrigger 
+            render={
+              <Button variant="ghost" size="icon" className="-ml-2">
+                <span className="sr-only">Open sidebar</span>
+                <Menu className="h-6 w-6" aria-hidden="true" />
+              </Button>
+            }
+          />
           <SheetContent side="left" className="w-72 p-0">
             <div className="flex h-full flex-col bg-card px-3 py-4">
               <div className="mb-8 flex items-center px-3 mt-4">
