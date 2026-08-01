@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { LayoutDashboard, Users, Box, ShoppingCart, Activity, FileText, Settings, Eye } from "lucide-react";
 
-const navigation = [
+export const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard },
   { name: "POS Billing", href: "/pos", icon: ShoppingCart },
   { name: "Customers", href: "/customers", icon: Users },
