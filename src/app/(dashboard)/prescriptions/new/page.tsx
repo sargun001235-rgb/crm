@@ -9,6 +9,18 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowLeft, Copy } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { Controller } from "react-hook-form";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+
+const formatPower = (num: number) => {
+  if (num === 0) return "0.00";
+  return num > 0 ? `+${num.toFixed(2)}` : num.toFixed(2);
+};
+
+const sphOptions = ["", ...Array.from({ length: 161 }, (_, i) => formatPower((i - 80) * 0.25))];
+const cylOptions = ["", ...Array.from({ length: 81 }, (_, i) => formatPower((i - 40) * 0.25))];
+const axisOptions = ["", ...Array.from({ length: 181 }, (_, i) => i.toString())];
+const addOptions = ["", ...Array.from({ length: 17 }, (_, i) => formatPower(i * 0.25))];
 
 export default function NewPrescriptionPage() {
   const router = useRouter();
@@ -81,10 +93,42 @@ export default function NewPrescriptionPage() {
             <div className="space-y-4">
               <h3 className="font-semibold text-lg text-primary">Right Eye (OD)</h3>
               <div className="grid grid-cols-6 gap-4">
-                <div className="space-y-2"><Label>SPH</Label><Input {...form.register("re_sph")} /></div>
-                <div className="space-y-2"><Label>CYL</Label><Input {...form.register("re_cyl")} /></div>
-                <div className="space-y-2"><Label>AXIS</Label><Input {...form.register("re_axis")} /></div>
-                <div className="space-y-2"><Label>ADD</Label><Input {...form.register("re_add")} /></div>
+                <div className="space-y-2">
+                  <Label>SPH</Label>
+                  <Controller name="re_sph" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{sphOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
+                <div className="space-y-2">
+                  <Label>CYL</Label>
+                  <Controller name="re_cyl" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{cylOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
+                <div className="space-y-2">
+                  <Label>AXIS</Label>
+                  <Controller name="re_axis" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{axisOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
+                <div className="space-y-2">
+                  <Label>ADD</Label>
+                  <Controller name="re_add" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{addOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
                 <div className="space-y-2"><Label>PRISM</Label><Input {...form.register("re_prism")} /></div>
                 <div className="space-y-2"><Label>VA</Label><Input {...form.register("re_va")} /></div>
               </div>
@@ -95,10 +139,42 @@ export default function NewPrescriptionPage() {
             <div className="space-y-4">
               <h3 className="font-semibold text-lg text-primary">Left Eye (OS)</h3>
               <div className="grid grid-cols-6 gap-4">
-                <div className="space-y-2"><Label>SPH</Label><Input {...form.register("le_sph")} /></div>
-                <div className="space-y-2"><Label>CYL</Label><Input {...form.register("le_cyl")} /></div>
-                <div className="space-y-2"><Label>AXIS</Label><Input {...form.register("le_axis")} /></div>
-                <div className="space-y-2"><Label>ADD</Label><Input {...form.register("le_add")} /></div>
+                <div className="space-y-2">
+                  <Label>SPH</Label>
+                  <Controller name="le_sph" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{sphOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
+                <div className="space-y-2">
+                  <Label>CYL</Label>
+                  <Controller name="le_cyl" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{cylOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
+                <div className="space-y-2">
+                  <Label>AXIS</Label>
+                  <Controller name="le_axis" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{axisOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
+                <div className="space-y-2">
+                  <Label>ADD</Label>
+                  <Controller name="le_add" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>{addOptions.map(o => <SelectItem key={o || "none"} value={o || "none"}>{o || "-"}</SelectItem>)}</SelectContent>
+                    </Select>
+                  )} />
+                </div>
                 <div className="space-y-2"><Label>PRISM</Label><Input {...form.register("le_prism")} /></div>
                 <div className="space-y-2"><Label>VA</Label><Input {...form.register("le_va")} /></div>
               </div>
