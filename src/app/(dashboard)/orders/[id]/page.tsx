@@ -1,5 +1,6 @@
 "use client";
 
+import { use } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -15,8 +16,9 @@ const timelineEvents = [
   { id: 5, status: "Delivered", description: "Handed over to customer", date: "-", isCompleted: false },
 ];
 
-export default function OrderDetailsPage({ params }: { params: { id: string } }) {
+export default function OrderDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
+  const { id } = use(params);
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -26,7 +28,7 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
             <ArrowLeft className="h-5 w-5" />
           </Button>
           <div>
-             <h1 className="text-3xl font-bold tracking-tight">Order {params.id.toUpperCase()}</h1>
+             <h1 className="text-3xl font-bold tracking-tight">Order {id.toUpperCase()}</h1>
              <p className="text-muted-foreground mt-1">Customer: Rahul Sharma • Due Date: Aug 05, 2026</p>
           </div>
         </div>

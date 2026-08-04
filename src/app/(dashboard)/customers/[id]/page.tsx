@@ -9,8 +9,9 @@ import DeleteCustomerButton from "./DeleteCustomerButton";
 import { getCustomer, deleteCustomer } from "../actions";
 import { notFound } from "next/navigation";
 
-export default async function CustomerProfilePage({ params }: { params: { id: string } }) {
-  const customer = await getCustomer(params.id);
+export default async function CustomerProfilePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const customer = await getCustomer(id);
 
   if (!customer) {
     notFound();

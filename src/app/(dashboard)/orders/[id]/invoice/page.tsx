@@ -1,19 +1,20 @@
 "use client";
 
-import { useRef } from "react";
+import { use, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Printer, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { useReactToPrint } from "react-to-print";
 
-export default function InvoicePrintPage({ params }: { params: { id: string } }) {
+export default function InvoicePrintPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
+  const { id } = use(params);
   const contentRef = useRef<HTMLDivElement>(null);
   
   const handlePrint = useReactToPrint({
     contentRef: contentRef,
-    documentTitle: `Invoice_${params.id}`
+    documentTitle: `Invoice_${id}`
   });
 
   return (
@@ -36,7 +37,7 @@ export default function InvoicePrintPage({ params }: { params: { id: string } })
           <div className="flex justify-between items-start">
           <div>
             <h1 className="text-4xl font-bold text-black">INVOICE</h1>
-            <p className="text-gray-500 mt-1">Order # {params.id.toUpperCase()}</p>
+            <p className="text-gray-500 mt-1">Order # {id.toUpperCase()}</p>
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-bold tracking-tight">LUMIÈRE OPTICS</h2>
