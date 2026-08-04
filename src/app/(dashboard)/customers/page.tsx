@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { Plus, Search } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import CustomerSearch from "./CustomerSearch";
 import {
   Table,
   TableBody,
@@ -13,8 +13,18 @@ import {
 import { Customer } from "@/types/database.types";
 import { getCustomers } from "./actions";
 
-export default async function CustomersPage() {
-  const customers = await getCustomers();
+export default async function CustomersPage({ searchParams }: { searchParams: { q?: string } }) {
+  let customers = await getCustomers();
+  
+  if (searchParams.q) {
+    const query = searchParams.q.toLowerCase();
+    customers = customers.filter(c => 
+      c.first_name.toLowerCase().includes(query) ||
+      (c.last_name && c.last_name.toLowerCase().includes(query)) ||
+      c.phone.includes(query) ||
+      (c.city && c.city.toLowerCase().includes(query))
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -27,14 +37,7 @@ export default async function CustomersPage() {
       </div>
 
       <div className="flex items-center space-x-2">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search by name, mobile, or city..."
-            className="pl-8"
-          />
-        </div>
+        <CustomerSearch />
       </div>
 
       <div className="rounded-md border bg-card">

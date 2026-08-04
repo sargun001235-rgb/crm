@@ -4,22 +4,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft, Edit, Plus, FileText, ShoppingBag, Calendar } from "lucide-react";
 import Link from "next/link";
+import DeleteCustomerButton from "./DeleteCustomerButton";
 
-export default function CustomerProfilePage({ params }: { params: { id: string } }) {
-  // Mock data for display
-  const customer = {
-    id: params.id,
-    first_name: "Rahul",
-    last_name: "Sharma",
-    phone: "+91 9876543210",
-    email: "rahul.s@example.com",
-    address: "123 MG Road",
-    city: "Mumbai",
-    date_of_birth: "1985-06-15",
-    medical_history: "Diabetes",
-    lifetime_spending: 15400,
-    outstanding_balance: 0,
-  };
+import { getCustomer, deleteCustomer } from "../actions";
+import { notFound } from "next/navigation";
+
+export default async function CustomerProfilePage({ params }: { params: { id: string } }) {
+  const customer = await getCustomer(params.id);
+
+  if (!customer) {
+    notFound();
+  }
 
   return (
     <div className="space-y-6">
@@ -38,10 +33,16 @@ export default function CustomerProfilePage({ params }: { params: { id: string }
           )}
         </div>
         <div className="flex space-x-2">
-          <Button variant="outline">
+          <Link href={`/customers/${customer.id}/edit`} className={buttonVariants({ variant: "outline" })}>
             <Edit className="mr-2 h-4 w-4" />
             Edit Profile
-          </Button>
+          </Link>
+          <form action={async () => {
+            "use server";
+            await deleteCustomer(customer.id);
+          }}>
+            <DeleteCustomerButton />
+          </form>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
             New Order
@@ -105,7 +106,7 @@ export default function CustomerProfilePage({ params }: { params: { id: string }
               <div className="text-center py-10 text-muted-foreground">
                 <FileText className="mx-auto h-10 w-10 opacity-20 mb-4" />
                 <p>No prescriptions found.</p>
-                <Button variant="outline" className="mt-4">Add Prescription</Button>
+                <Link href="/prescriptions/new" className={buttonVariants({ variant: "outline", className: "mt-4" })}>Add Prescription</Link>
               </div>
             </TabsContent>
             
