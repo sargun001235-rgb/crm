@@ -12,29 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Order, OrderStatus } from "@/types/database.types";
-
-const mockOrders = [
-  {
-    id: "ord-001",
-    order_number: "ORD-2026-0801",
-    customer_name: "Rahul Sharma",
-    status: "Sent to Lab" as OrderStatus,
-    total_amount: 8500,
-    balance_due: 0,
-    estimated_delivery: "2026-08-05",
-    created_at: new Date().toISOString()
-  },
-  {
-    id: "ord-002",
-    order_number: "ORD-2026-0802",
-    customer_name: "Priya Patel",
-    status: "Ready" as OrderStatus,
-    total_amount: 3200,
-    balance_due: 1500,
-    estimated_delivery: "2026-08-01",
-    created_at: new Date(Date.now() - 86400000).toISOString()
-  }
-];
+import { getOrders } from "./actions";
 
 const getStatusBadge = (status: OrderStatus) => {
   switch(status) {
@@ -47,7 +25,9 @@ const getStatusBadge = (status: OrderStatus) => {
   }
 };
 
-export default function OrdersPage() {
+export default async function OrdersPage() {
+  const orders = await getOrders();
+  
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -82,24 +62,32 @@ export default function OrdersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockOrders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-medium">{order.order_number}</TableCell>
-                <TableCell>{order.customer_name}</TableCell>
-                <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
-                <TableCell>{getStatusBadge(order.status)}</TableCell>
-                <TableCell className="text-right">₹{order.total_amount}</TableCell>
-                <TableCell className="text-right font-medium text-destructive">
-                  {order.balance_due > 0 ? `₹${order.balance_due}` : "-"}
-                </TableCell>
-                <TableCell className="text-right">
-                  <Link href={`/orders/${order.id}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
-                    <ExternalLink className="mr-2 h-4 w-4" />
-                    Details
-                  </Link>
+            {orders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                  No orders found. Create a new POS billing order!
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              orders.map((order: any) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium">{order.order_number}</TableCell>
+                  <TableCell>{order.customer_name}</TableCell>
+                  <TableCell>{new Date(order.created_at).toLocaleDateString()}</TableCell>
+                  <TableCell>{getStatusBadge(order.status)}</TableCell>
+                  <TableCell className="text-right">₹{order.total_amount}</TableCell>
+                  <TableCell className="text-right font-medium text-destructive">
+                    {order.balance_due > 0 ? `₹${order.balance_due}` : "-"}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Link href={`/orders/${order.id}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
+                      <ExternalLink className="mr-2 h-4 w-4" />
+                      Details
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

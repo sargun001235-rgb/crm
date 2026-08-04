@@ -1,18 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
+import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Printer, ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
+import { useReactToPrint } from "react-to-print";
 
 export default function InvoicePrintPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-
-  useEffect(() => {
-    // Automatically open print dialog on load in production
-    // window.print();
-  }, []);
+  const contentRef = useRef<HTMLDivElement>(null);
+  
+  const handlePrint = useReactToPrint({
+    contentRef: contentRef,
+    documentTitle: `Invoice_${params.id}`
+  });
 
   return (
     <div className="min-h-screen bg-white text-black p-8 print:p-0">
@@ -23,14 +25,15 @@ export default function InvoicePrintPage({ params }: { params: { id: string } })
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Order
           </Button>
-          <Button onClick={() => window.print()}>
+          <Button onClick={() => handlePrint()}>
             <Printer className="mr-2 h-4 w-4" />
             Print Invoice
           </Button>
         </div>
 
         {/* Invoice Header */}
-        <div className="flex justify-between items-start">
+        <div ref={contentRef} className="p-8 bg-white text-black">
+          <div className="flex justify-between items-start">
           <div>
             <h1 className="text-4xl font-bold text-black">INVOICE</h1>
             <p className="text-gray-500 mt-1">Order # {params.id.toUpperCase()}</p>
@@ -127,6 +130,7 @@ export default function InvoicePrintPage({ params }: { params: { id: string } })
         <div className="pt-16 text-center text-sm text-gray-500 space-y-1">
           <p>Thank you for choosing Lumière Optics!</p>
           <p>Goods once sold cannot be returned. Exchange available within 7 days.</p>
+        </div>
         </div>
       </div>
     </div>

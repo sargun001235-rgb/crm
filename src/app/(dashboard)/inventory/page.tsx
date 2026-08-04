@@ -12,45 +12,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Inventory } from "@/types/database.types";
+import { getInventory } from "./actions";
 
-const mockInventory: Inventory[] = [
-  {
-    id: "inv-1",
-    sku: "FRM-RB-3025",
-    barcode: "8053672000000",
-    category: "Sunglasses",
-    brand: "Ray-Ban",
-    model: "Aviator Classic",
-    color: "Gold / Green",
-    purchase_price: 4500,
-    selling_price: 8500,
-    stock_quantity: 12,
-    low_stock_threshold: 5,
-    supplier_id: null,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    created_by: null
-  },
-  {
-    id: "inv-2",
-    sku: "LNS-CZ-156",
-    barcode: "8053672000001",
-    category: "Lenses",
-    brand: "Zeiss",
-    model: "ClearView 1.56",
-    color: "Clear",
-    purchase_price: 800,
-    selling_price: 2500,
-    stock_quantity: 3,
-    low_stock_threshold: 10,
-    supplier_id: null,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    created_by: null
-  }
-];
+export default async function InventoryPage() {
+  const inventory = await getInventory();
 
-export default function InventoryPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -85,37 +51,45 @@ export default function InventoryPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockInventory.map((item) => (
-              <TableRow key={item.id}>
-                <TableCell className="font-medium">{item.sku}</TableCell>
-                <TableCell>
-                  <div className="flex flex-col">
-                    <span className="font-medium text-primary">
-                      {item.brand} {item.model}
-                    </span>
-                    <span className="text-xs text-muted-foreground">{item.color}</span>
-                  </div>
-                </TableCell>
-                <TableCell>{item.category}</TableCell>
-                <TableCell className="text-right">
-                  {item.stock_quantity <= item.low_stock_threshold ? (
-                    <Badge variant="destructive" className="ml-auto">
-                      <AlertTriangle className="mr-1 h-3 w-3" />
-                      {item.stock_quantity}
-                    </Badge>
-                  ) : (
-                    <Badge variant="secondary">{item.stock_quantity}</Badge>
-                  )}
-                </TableCell>
-                <TableCell className="text-right">₹{item.selling_price}</TableCell>
-                <TableCell className="text-right">
-                  <Link href={`/inventory/${item.id}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
-                    <Pencil className="mr-2 h-4 w-4" />
-                    Edit
-                  </Link>
+            {inventory.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                  No inventory items found. Start adding products!
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              inventory.map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell className="font-medium">{item.sku}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col">
+                      <span className="font-medium text-primary">
+                        {item.brand} {item.model}
+                      </span>
+                      <span className="text-xs text-muted-foreground">{item.color}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{item.category}</TableCell>
+                  <TableCell className="text-right">
+                    {item.stock_quantity <= item.low_stock_threshold ? (
+                      <Badge variant="destructive" className="ml-auto">
+                        <AlertTriangle className="mr-1 h-3 w-3" />
+                        {item.stock_quantity}
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary">{item.stock_quantity}</Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">₹{item.selling_price}</TableCell>
+                  <TableCell className="text-right">
+                    <Link href={`/inventory/${item.id}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
+                      <Pencil className="mr-2 h-4 w-4" />
+                      Edit
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

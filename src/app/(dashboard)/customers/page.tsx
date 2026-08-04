@@ -11,43 +11,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Customer } from "@/types/database.types";
+import { getCustomers } from "./actions";
 
-const mockCustomers: Customer[] = [
-  {
-    id: "1",
-    first_name: "Rahul",
-    last_name: "Sharma",
-    phone: "+91 9876543210",
-    email: "rahul.s@example.com",
-    address: "123 MG Road",
-    city: "Mumbai",
-    date_of_birth: "1985-06-15",
-    medical_history: "Diabetes",
-    lifetime_spending: 15400,
-    outstanding_balance: 0,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    created_by: null,
-  },
-  {
-    id: "2",
-    first_name: "Priya",
-    last_name: "Patel",
-    phone: "+91 9123456789",
-    email: "priya.p@example.com",
-    address: "456 Link Road",
-    city: "Ahmedabad",
-    date_of_birth: "1992-11-20",
-    medical_history: "None",
-    lifetime_spending: 8200,
-    outstanding_balance: 1500,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    created_by: null,
-  }
-];
+export default async function CustomersPage() {
+  const customers = await getCustomers();
 
-export default function CustomersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -81,21 +49,29 @@ export default function CustomersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {mockCustomers.map((customer) => (
-              <TableRow key={customer.id}>
-                <TableCell className="font-medium">
-                  <Link href={`/customers/${customer.id}`} className="hover:underline text-primary">
-                    {customer.first_name} {customer.last_name}
-                  </Link>
-                </TableCell>
-                <TableCell>{customer.phone}</TableCell>
-                <TableCell>{customer.city}</TableCell>
-                <TableCell className="text-right">₹{customer.lifetime_spending}</TableCell>
-                <TableCell className="text-right text-destructive font-medium">
-                  {customer.outstanding_balance > 0 ? `₹${customer.outstanding_balance}` : "₹0"}
+            {customers.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                  No customers found. Create your first customer!
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              customers.map((customer) => (
+                <TableRow key={customer.id}>
+                  <TableCell className="font-medium">
+                    <Link href={`/customers/${customer.id}`} className="hover:underline text-primary">
+                      {customer.first_name} {customer.last_name}
+                    </Link>
+                  </TableCell>
+                  <TableCell>{customer.phone}</TableCell>
+                  <TableCell>{customer.city}</TableCell>
+                  <TableCell className="text-right">₹{customer.lifetime_spending}</TableCell>
+                  <TableCell className="text-right text-destructive font-medium">
+                    {customer.outstanding_balance > 0 ? `₹${customer.outstanding_balance}` : "₹0"}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </div>

@@ -1,7 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, IndianRupee, ShoppingCart, Users } from "lucide-react";
+import { getDashboardMetrics } from "./actions";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const metrics = await getDashboardMetrics();
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -15,8 +18,8 @@ export default function DashboardPage() {
             <IndianRupee className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₹45,231.89</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            <div className="text-2xl font-bold">₹{metrics.totalRevenue.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">Lifetime Revenue</p>
           </CardContent>
         </Card>
         <Card>
@@ -25,8 +28,8 @@ export default function DashboardPage() {
             <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+235</div>
-            <p className="text-xs text-muted-foreground">+180.1% from last month</p>
+            <div className="text-2xl font-bold">{metrics.pendingOrders}</div>
+            <p className="text-xs text-muted-foreground">In production & At Lab</p>
           </CardContent>
         </Card>
         <Card>
@@ -35,18 +38,18 @@ export default function DashboardPage() {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+12,234</div>
-            <p className="text-xs text-muted-foreground">+19% from last month</p>
+            <div className="text-2xl font-bold">{metrics.activeCustomers}</div>
+            <p className="text-xs text-muted-foreground">Unique lifetime customers</p>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Now</CardTitle>
+            <CardTitle className="text-sm font-medium">Advance Today</CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">+573</div>
-            <p className="text-xs text-muted-foreground">+201 since last hour</p>
+            <div className="text-2xl font-bold">₹{metrics.advanceCollectedToday.toLocaleString()}</div>
+            <p className="text-xs text-muted-foreground">Collected today</p>
           </CardContent>
         </Card>
       </div>
@@ -66,18 +69,21 @@ export default function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-8">
-              {/* placeholder items */}
-              {[1,2,3,4,5].map((i) => (
-                <div key={i} className="flex items-center">
-                  <div className="ml-4 space-y-1">
-                    <p className="text-sm font-medium leading-none">Customer {i}</p>
-                    <p className="text-sm text-muted-foreground">
-                      customer{i}@email.com
-                    </p>
+              {metrics.recentSales.length === 0 ? (
+                <div className="text-center text-muted-foreground">No recent sales</div>
+              ) : (
+                metrics.recentSales.map((sale: any) => (
+                  <div key={sale.id} className="flex items-center">
+                    <div className="ml-4 space-y-1">
+                      <p className="text-sm font-medium leading-none">{sale.customer_name}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {sale.email}
+                      </p>
+                    </div>
+                    <div className="ml-auto font-medium">+₹{sale.amount.toLocaleString()}</div>
                   </div>
-                  <div className="ml-auto font-medium">+₹1,999.00</div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </CardContent>
         </Card>
