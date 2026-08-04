@@ -65,21 +65,21 @@ export default function PrescriptionClient({ prescription }: { prescription: any
                   <tbody className="divide-y divide-black">
                     <tr>
                       <td className="px-4 py-3 font-bold text-left border-r border-black">Right (OD)</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.sph_right || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.cyl_right || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.axis_right || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.add_right || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.prism_right || "-"}</td>
-                      <td className="px-4 py-3">{prescription.va_right || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.re_sph || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.re_cyl || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.re_axis || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.re_add || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.re_prism || "-"}</td>
+                      <td className="px-4 py-3">{prescription.re_va || "-"}</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-3 font-bold text-left border-r border-black">Left (OS)</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.sph_left || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.cyl_left || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.axis_left || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.add_left || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.prism_left || "-"}</td>
-                      <td className="px-4 py-3">{prescription.va_left || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.le_sph || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.le_cyl || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.le_axis || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.le_add || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{prescription.le_prism || "-"}</td>
+                      <td className="px-4 py-3">{prescription.le_va || "-"}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -101,7 +101,7 @@ export default function PrescriptionClient({ prescription }: { prescription: any
               </div>
               <div>
                 <p className="text-xs font-bold text-gray-500 uppercase">Coating</p>
-                <p className="font-medium mt-1">{prescription.coating || "-"}</p>
+                <p className="font-medium mt-1">{prescription.lens_coating || "-"}</p>
               </div>
             </div>
 
