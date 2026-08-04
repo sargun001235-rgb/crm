@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Printer, Edit2, Trash2 } from "lucide-react";
+import { ArrowLeft, Printer, Edit2, Trash2, Eye } from "lucide-react";
 import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
 import { deletePrescription } from "../actions";
@@ -52,12 +52,16 @@ export default function PrescriptionClient({ prescription }: { prescription: any
         <Card className="border-none shadow-none print:shadow-none">
           <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-black">
             <div>
-              <CardTitle className="text-xl">Customer: {prescription.customer_name}</CardTitle>
-              <p className="text-sm text-gray-500 mt-1">Date: {new Date(prescription.created_at).toLocaleDateString()}</p>
+              <CardTitle className="text-xl font-bold flex items-center space-x-2">
+                <Eye className="w-6 h-6 text-black" />
+                <span>Amritsar Eyewears</span>
+              </CardTitle>
+              <p className="text-sm text-gray-500 mt-1">Customer: {prescription.customer_name}</p>
+              <p className="text-sm text-gray-500 mt-1">Phone: {prescription.customer_phone}</p>
             </div>
             <div className="text-right">
               <p className="font-semibold">{prescription.doctor_name || "Dr. Admin"}</p>
-              <p className="text-sm text-gray-500">FOKALS EYEWEARS</p>
+              <p className="text-sm text-gray-500 mt-1">Date: {new Date(prescription.created_at).toLocaleDateString()}</p>
             </div>
           </CardHeader>
           <CardContent className="pt-6 space-y-8 text-black">
@@ -121,6 +125,23 @@ export default function PrescriptionClient({ prescription }: { prescription: any
             <div>
                <p className="text-xs font-bold text-gray-500 uppercase">Remarks</p>
                <p className="font-medium mt-1">{prescription.remarks || "No remarks."}</p>
+            </div>
+
+            <div className="pt-8 space-y-4">
+               <div className="bg-gray-100 p-4 rounded-lg border border-black text-center text-sm space-y-1">
+                 <p className="font-semibold">The checkup is valid up to 5 months.</p>
+                 <p className="font-semibold text-primary">Get 10% discount when checked again under 5 months!</p>
+               </div>
+               
+               <div className="text-xs text-gray-600 space-y-1 border-t border-gray-300 pt-4">
+                 <p className="font-bold uppercase mb-2">Eye Care Habits for Safe Vision:</p>
+                 <ul className="list-disc pl-4 space-y-1">
+                   <li>Take regular screen breaks using the 20-20-20 rule (Every 20 mins, look 20 ft away for 20 secs).</li>
+                   <li>Wear UV protection sunglasses when outdoors.</li>
+                   <li>Maintain a healthy diet rich in leafy greens and omega-3s.</li>
+                   <li>Avoid rubbing your eyes and ensure proper lighting while reading.</li>
+                 </ul>
+               </div>
             </div>
           </CardContent>
         </Card>

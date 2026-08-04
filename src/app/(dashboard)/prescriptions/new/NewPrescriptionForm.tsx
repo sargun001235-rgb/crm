@@ -298,7 +298,20 @@ export default function NewPrescriptionForm({ customers }: { customers: any[] })
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-               <div className="space-y-2"><Label>Doctor / Optometrist</Label><Input {...form.register("doctor")} /></div>
+               <div className="space-y-2">
+                 <Label>Doctor / Optometrist</Label>
+                 <Controller name="doctor" control={form.control} render={({ field }) => (
+                   <Select onValueChange={field.onChange} value={field.value}>
+                     <SelectTrigger><SelectValue placeholder="Select Doctor" /></SelectTrigger>
+                     <SelectContent>
+                       <SelectItem value="none">None</SelectItem>
+                       <SelectItem value="Dr. Armandeep Singh">Dr. Armandeep Singh</SelectItem>
+                       <SelectItem value="Dr. Jaswinder Singh">Dr. Jaswinder Singh</SelectItem>
+                       <SelectItem value="Other">Other</SelectItem>
+                     </SelectContent>
+                   </Select>
+                 )} />
+               </div>
                <div className="space-y-2"><Label>Remarks</Label><Input {...form.register("remarks")} /></div>
             </div>
           </CardContent>

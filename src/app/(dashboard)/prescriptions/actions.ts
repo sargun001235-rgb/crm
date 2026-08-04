@@ -12,7 +12,8 @@ export async function getPrescription(id: string) {
       *,
       customers (
         first_name,
-        last_name
+        last_name,
+        phone
       )
     `)
     .eq("id", id)
@@ -24,7 +25,8 @@ export async function getPrescription(id: string) {
   }
   return {
     ...data,
-    customer_name: `${data.customers?.first_name || ""} ${data.customers?.last_name || ""}`.trim()
+    customer_name: `${data.customers?.first_name || ""} ${data.customers?.last_name || ""}`.trim(),
+    customer_phone: data.customers?.phone || "",
   };
 }
 

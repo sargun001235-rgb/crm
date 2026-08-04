@@ -5,8 +5,42 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useSettingsStore } from "@/stores/useSettingsStore";
+import { useState, useEffect } from "react";
 
 export default function SettingsPage() {
+  const settings = useSettingsStore();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Form states
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [storeName, setStoreName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [gstin, setGstin] = useState("");
+
+  useEffect(() => {
+    setIsMounted(true);
+    setFirstName(settings.firstName);
+    setLastName(settings.lastName);
+    setStoreName(settings.storeName);
+    setAddress(settings.address);
+    setPhone(settings.phone);
+    setGstin(settings.gstin);
+  }, [settings]);
+
+  if (!isMounted) return null; // Avoid hydration mismatch
+
+  const handleSaveProfile = () => {
+    settings.updateProfile({ firstName, lastName });
+    alert("Profile saved successfully!");
+  };
+
+  const handleSaveStore = () => {
+    settings.updateStoreDetails({ storeName, address, phone, gstin });
+    alert("Store details saved successfully!");
+  };
   return (
     <div className="space-y-6 max-w-4xl mx-auto">
       <div>
@@ -48,18 +82,18 @@ export default function SettingsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>First Name</Label>
-                  <Input defaultValue="Admin" />
+                  <Input value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label>Last Name</Label>
-                  <Input defaultValue="User" />
+                  <Input value={lastName} onChange={(e) => setLastName(e.target.value)} />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label>Email</Label>
-                <Input defaultValue="admin@lumiereoptics.com" disabled />
+                <Input defaultValue="admin@amritsareyewears.com" disabled />
               </div>
-              <Button>Save Changes</Button>
+              <Button onClick={handleSaveProfile}>Save Changes</Button>
             </CardContent>
           </Card>
         </TabsContent>
@@ -73,23 +107,23 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label>Store Name</Label>
-                <Input defaultValue="Lumière Optics" />
+                <Input value={storeName} onChange={(e) => setStoreName(e.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label>Address</Label>
-                <Input defaultValue="123 Visionary Ave, Optic City" />
+                <Input value={address} onChange={(e) => setAddress(e.target.value)} />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Phone Number</Label>
-                  <Input defaultValue="+91 98765 43210" />
+                  <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
                 </div>
                 <div className="space-y-2">
                   <Label>GSTIN</Label>
-                  <Input defaultValue="27AADCB2230M1Z2" />
+                  <Input value={gstin} onChange={(e) => setGstin(e.target.value)} />
                 </div>
               </div>
-              <Button>Save Store Details</Button>
+              <Button onClick={handleSaveStore}>Save Store Details</Button>
             </CardContent>
           </Card>
         </TabsContent>

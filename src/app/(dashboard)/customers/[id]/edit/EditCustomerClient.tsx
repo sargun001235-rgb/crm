@@ -20,6 +20,7 @@ const formSchema = z.object({
   city: z.string().optional(),
   dateOfBirth: z.string().optional(),
   medicalHistory: z.string().optional(),
+  outstandingBalance: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -39,6 +40,7 @@ export default function EditCustomerClient({ customer }: { customer: any }) {
       city: customer.city || "",
       dateOfBirth: customer.date_of_birth || "",
       medicalHistory: customer.medical_history || "",
+      outstandingBalance: customer.outstanding_balance?.toString() || "0",
     },
   });
 
@@ -54,6 +56,7 @@ export default function EditCustomerClient({ customer }: { customer: any }) {
     formData.append("city", data.city || "");
     formData.append("date_of_birth", data.dateOfBirth || "");
     formData.append("medical_history", data.medicalHistory || "");
+    formData.append("outstanding_balance", data.outstandingBalance || "0");
 
     const result = await updateCustomer(customer.id, formData);
     
@@ -128,6 +131,11 @@ export default function EditCustomerClient({ customer }: { customer: any }) {
                 <Label htmlFor="medicalHistory">Medical History</Label>
                 <Input id="medicalHistory" {...form.register("medicalHistory")} placeholder="e.g. Diabetes, Hypertension" />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="outstandingBalance">Opening Balance / Previous Dues (₹)</Label>
+              <Input id="outstandingBalance" type="number" step="0.01" {...form.register("outstandingBalance")} placeholder="0.00" />
             </div>
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>
