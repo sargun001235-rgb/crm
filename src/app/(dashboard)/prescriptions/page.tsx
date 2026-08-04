@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { Prescription } from "@/types/database.types";
 import { getPrescriptions, deletePrescription } from "./actions";
+import { DeleteButton } from "@/components/ui/DeleteButton";
 
 export default async function PrescriptionsPage() {
   const prescriptions = await getPrescriptions();
@@ -71,12 +72,11 @@ export default async function PrescriptionsPage() {
                     <Link href={`/prescriptions/${rx.id}/edit`} className={buttonVariants({ variant: "outline", size: "sm" })}>
                       <Edit2 className="h-4 w-4" />
                     </Link>
-                    <form action={deletePrescription.bind(null, rx.id)} className="inline-block">
-                      <Button variant="destructive" size="sm" type="submit" onClick={(e) => {
-                        if (!confirm('Are you sure you want to delete this prescription?')) e.preventDefault();
-                      }}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                    <form action={async () => {
+                      "use server";
+                      await deletePrescription(rx.id);
+                    }} className="inline-block">
+                      <DeleteButton iconOnly text="prescription" />
                     </form>
                   </TableCell>
                 </TableRow>

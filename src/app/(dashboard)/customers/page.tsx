@@ -13,12 +13,14 @@ import {
 import { Customer } from "@/types/database.types";
 import { getCustomers, deleteCustomer } from "./actions";
 import DeleteCustomerButton from "./[id]/DeleteCustomerButton";
+import { DeleteButton } from "@/components/ui/DeleteButton";
 
-export default async function CustomersPage({ searchParams }: { searchParams: { q?: string } }) {
+export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const resolvedSearchParams = await searchParams;
   let customers = await getCustomers();
   
-  if (searchParams.q) {
-    const query = searchParams.q.toLowerCase();
+  if (resolvedSearchParams.q) {
+    const query = resolvedSearchParams.q.toLowerCase();
     customers = customers.filter(c => 
       c.first_name.toLowerCase().includes(query) ||
       (c.last_name && c.last_name.toLowerCase().includes(query)) ||
@@ -82,11 +84,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: { 
                       "use server";
                       await deleteCustomer(customer.id);
                     }} className="inline-block">
-                      <Button variant="destructive" size="sm" type="submit" onClick={(e) => {
-                        if (!confirm('Are you sure you want to delete this customer?')) e.preventDefault();
-                      }}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <DeleteButton iconOnly text="customer" />
                     </form>
                   </TableCell>
                 </TableRow>
