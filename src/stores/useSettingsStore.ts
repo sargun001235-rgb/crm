@@ -16,8 +16,8 @@ export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
       storeName: "Amritsar Eyeclinic",
-      address: "123 Visionary Ave, Optic City",
-      phone: "+91 98765 43210",
+      address: "Shahheed Udham Singh Nagar Main Bazar Street No.4",
+      phone: "9915930068, 7340710332",
       gstin: "27AADCB2230M1Z2",
       firstName: "Admin",
       lastName: "User",

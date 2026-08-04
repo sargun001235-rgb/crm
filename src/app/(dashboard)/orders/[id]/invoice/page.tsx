@@ -42,10 +42,12 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           <div className="text-right">
             <h2 className="text-2xl font-bold tracking-tight flex items-center justify-end space-x-2">
               <Eye className="w-8 h-8 text-black" />
-              <span>Amritsar Eyeclinic</span>
+              <div className="flex flex-col text-right">
+                <span>Amritsar Eyeclinic</span>
+                <span className="text-xs font-normal text-gray-500 mt-1">Shahheed Udham Singh Nagar Main Bazar Street No.4</span>
+                <span className="text-xs font-normal text-gray-500">Phone: 9915930068, 7340710332</span>
+              </div>
             </h2>
-            <p className="text-sm text-gray-500 mt-1">123 Visionary Ave, Optic City</p>
-            <p className="text-sm text-gray-500">Phone: +91 98765 43210</p>
             <p className="text-sm text-gray-500">GSTIN: 27AADCB2230M1Z2</p>
           </div>
         </div>
