@@ -19,7 +19,7 @@ export function Sidebar() {
         <div className="flex items-center justify-center w-8 h-8 rounded bg-primary text-primary-foreground font-bold mr-3">
           O
         </div>
-        <span className="text-xl font-bold">Optical CRM</span>
+        <span className="text-xl font-bold">Amritsar Eyeclinic</span>
       </div>
       <nav className="flex-1 space-y-1">
         {navigation.map((item) => {
