@@ -1,5 +1,7 @@
 "use client";
 
+import { createCustomer } from "../actions";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,12 +45,26 @@ export default function NewCustomerPage() {
 
   const onSubmit = async (data: FormValues) => {
     setIsSubmitting(true);
-    // TODO: implement Supabase Server Action creation here
-    console.log("Submitting:", data);
-    setTimeout(() => {
-      setIsSubmitting(false);
+    
+    const formData = new FormData();
+    formData.append("first_name", data.firstName);
+    formData.append("last_name", data.lastName || "");
+    formData.append("phone", data.phone);
+    formData.append("email", data.email || "");
+    formData.append("address", data.address || "");
+    formData.append("city", data.city || "");
+    formData.append("date_of_birth", data.dateOfBirth || "");
+    formData.append("medical_history", data.medicalHistory || "");
+
+    const result = await createCustomer(formData);
+    
+    setIsSubmitting(false);
+    
+    if (result.error) {
+      alert(result.error);
+    } else {
       router.push("/customers");
-    }, 1000);
+    }
   };
 
   return (
