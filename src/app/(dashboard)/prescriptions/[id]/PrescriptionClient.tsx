@@ -54,7 +54,7 @@ export default function PrescriptionClient({ prescription }: { prescription: any
             <div>
               <CardTitle className="text-xl font-bold flex items-center space-x-2">
                 <Eye className="w-6 h-6 text-black" />
-                <span>Amritsar Eyewears</span>
+                <span>Amritsar Eyeclinic</span>
               </CardTitle>
               <p className="text-sm text-gray-500 mt-1">Customer: {prescription.customer_name}</p>
               <p className="text-sm text-gray-500 mt-1">Phone: {prescription.customer_phone}</p>
@@ -129,8 +129,8 @@ export default function PrescriptionClient({ prescription }: { prescription: any
 
             <div className="pt-8 space-y-4">
                <div className="bg-gray-100 p-4 rounded-lg border border-black text-center text-sm space-y-1">
-                 <p className="font-semibold">The checkup is valid up to 5 months.</p>
-                 <p className="font-semibold text-primary">Get 10% discount when checked again under 5 months!</p>
+                 <p className="font-semibold">The checkup is valid up to 6 months.</p>
+                 <p className="font-semibold text-primary">Get 10% discount when checked again under 6 months!</p>
                </div>
                
                <div className="text-xs text-gray-600 space-y-1 border-t border-gray-300 pt-4">

@@ -42,7 +42,7 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           <div className="text-right">
             <h2 className="text-2xl font-bold tracking-tight flex items-center justify-end space-x-2">
               <Eye className="w-8 h-8 text-black" />
-              <span>Amritsar Eyewears</span>
+              <span>Amritsar Eyeclinic</span>
             </h2>
             <p className="text-sm text-gray-500 mt-1">123 Visionary Ave, Optic City</p>
             <p className="text-sm text-gray-500">Phone: +91 98765 43210</p>
@@ -157,8 +157,8 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           <p className="font-bold text-black text-lg">Total Billed Amount: ₹12,390.00</p>
           
           <div className="bg-gray-100 p-4 rounded-lg border border-black text-black space-y-1 inline-block">
-             <p className="font-semibold">The checkup is valid up to 5 months.</p>
-             <p className="font-semibold text-primary">Get 10% discount when checked again under 5 months!</p>
+             <p className="font-semibold">The checkup is valid up to 6 months.</p>
+             <p className="font-semibold text-primary">Get 10% discount when checked again under 6 months!</p>
           </div>
           
           <div className="text-xs text-gray-600 space-y-1">
@@ -168,7 +168,7 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
              <p>• Avoid rubbing your eyes and ensure proper lighting while reading.</p>
           </div>
           
-          <p className="pt-4 font-semibold text-black">Thank you for choosing Amritsar Eyewears!</p>
+          <p className="pt-4 font-semibold text-black">Thank you for choosing Amritsar Eyeclinic!</p>
           <p className="text-xs">Goods once sold cannot be returned. Exchange available within 7 days.</p>
         </div>
         </div>

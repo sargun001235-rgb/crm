@@ -306,7 +306,7 @@ export default function NewPrescriptionForm({ customers }: { customers: any[] })
                      <SelectContent>
                        <SelectItem value="none">None</SelectItem>
                        <SelectItem value="Dr. Armandeep Singh">Dr. Armandeep Singh</SelectItem>
-                       <SelectItem value="Dr. Jaswinder Singh">Dr. Jaswinder Singh</SelectItem>
+                       <SelectItem value="Dr. Jaspinder Singh">Dr. Jaspinder Singh</SelectItem>
                        <SelectItem value="Other">Other</SelectItem>
                      </SelectContent>
                    </Select>
