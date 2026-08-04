@@ -129,8 +129,7 @@ export default function PrescriptionClient({ prescription }: { prescription: any
 
             <div className="pt-8 space-y-4">
                <div className="bg-gray-100 p-4 rounded-lg border border-black text-center text-sm space-y-1">
-                 <p className="font-semibold">The checkup is valid up to 6 months.</p>
-                 <p className="font-semibold text-primary">Get 10% discount when checked again under 6 months!</p>
+                 <p className="font-semibold text-primary">A routine eye examination is recommended after 6 months to monitor your vision, detect any changes early, and maintain good eye health.</p>
                </div>
                
                <div className="text-xs text-gray-600 space-y-1 border-t border-gray-300 pt-4">
@@ -142,6 +141,11 @@ export default function PrescriptionClient({ prescription }: { prescription: any
                    <li>Avoid rubbing your eyes and ensure proper lighting while reading.</li>
                  </ul>
                </div>
+            </div>
+            <div className="pt-8 text-center">
+              <p className="text-xl font-bold tracking-tight italic text-primary mt-4">
+                "See the world with pure clarity"
+              </p>
             </div>
           </CardContent>
         </Card>

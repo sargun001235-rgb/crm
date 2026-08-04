@@ -157,8 +157,7 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           <p className="font-bold text-black text-lg">Total Billed Amount: ₹12,390.00</p>
           
           <div className="bg-gray-100 p-4 rounded-lg border border-black text-black space-y-1 inline-block">
-             <p className="font-semibold">The checkup is valid up to 6 months.</p>
-             <p className="font-semibold text-primary">Get 10% discount when checked again under 6 months!</p>
+             <p className="font-semibold text-primary">A routine eye examination is recommended after 6 months to monitor your vision, detect any changes early, and maintain good eye health.</p>
           </div>
           
           <div className="text-xs text-gray-600 space-y-1">
@@ -170,6 +169,12 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           
           <p className="pt-4 font-semibold text-black">Thank you for choosing Amritsar Eyeclinic!</p>
           <p className="text-xs">Goods once sold cannot be returned. Exchange available within 7 days.</p>
+          
+          <div className="pt-6">
+            <p className="text-xl font-bold tracking-tight italic text-primary">
+              "See the world with pure clarity"
+            </p>
+          </div>
         </div>
         </div>
       </div>
