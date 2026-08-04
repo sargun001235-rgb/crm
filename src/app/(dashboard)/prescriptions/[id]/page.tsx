@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Printer, Eye } from "lucide-react";
@@ -7,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 export default function PrescriptionProfilePage({ params }: { params: { id: string } }) {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between print:hidden">
         <div className="flex items-center space-x-4">
           <Link href="/prescriptions" className={buttonVariants({ variant: "ghost", size: "icon" })}>
             <ArrowLeft className="h-5 w-5" />
@@ -15,7 +17,7 @@ export default function PrescriptionProfilePage({ params }: { params: { id: stri
           <h1 className="text-3xl font-bold tracking-tight">Prescription Details</h1>
         </div>
         <div className="flex space-x-2">
-          <Button variant="default">
+          <Button variant="default" onClick={() => window.print()}>
             <Printer className="mr-2 h-4 w-4" />
             Print Prescription
           </Button>
