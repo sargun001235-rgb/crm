@@ -56,7 +56,7 @@ export default function PrescriptionClient({ prescription }: { prescription: any
                 <Eye className="w-6 h-6 text-black" />
                 <div className="flex flex-col">
                   <span>Amritsar Eyeclinic</span>
-                  <span className="text-xs font-normal text-gray-500 mt-1">Shahheed Udham Singh Nagar Main Bazar Street No.4</span>
+                  <span className="text-xs font-normal text-gray-500 mt-1">Shahheed Udham Singh Nagar Main Bazar Street No.3</span>
                   <span className="text-xs font-normal text-gray-500">Phone: 9915930068, 7340710332</span>
                 </div>
               </CardTitle>
