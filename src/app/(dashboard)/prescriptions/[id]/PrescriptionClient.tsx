@@ -44,7 +44,7 @@ export default function PrescriptionClient({ prescription }: { prescription: any
             </div>
             <div className="text-right">
               <p className="font-semibold">{prescription.doctor_name || "Dr. Admin"}</p>
-              <p className="text-sm text-gray-500">Optical CRM Clinic</p>
+              <p className="text-sm text-gray-500">FOKALS EYEWEARS</p>
             </div>
           </CardHeader>
           <CardContent className="pt-6 space-y-8 text-black">

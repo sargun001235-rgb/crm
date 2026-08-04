@@ -87,6 +87,9 @@ export type Order = {
   balance_due: number;
   estimated_delivery: string | null;
   actual_delivery: string | null;
+  lens_type: string | null;
+  frame_type: string | null;
+  lens_coating: string | null;
   created_at: string;
   updated_at: string;
   created_by: string | null;

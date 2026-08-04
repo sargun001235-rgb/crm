@@ -40,7 +40,7 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
             <p className="text-gray-500 mt-1">Order # {id.toUpperCase()}</p>
           </div>
           <div className="text-right">
-            <h2 className="text-2xl font-bold tracking-tight">LUMIÈRE OPTICS</h2>
+            <h2 className="text-2xl font-bold tracking-tight">FOKALS EYEWEARS</h2>
             <p className="text-sm text-gray-500 mt-1">123 Visionary Ave, Optic City</p>
             <p className="text-sm text-gray-500">Phone: +91 98765 43210</p>
             <p className="text-sm text-gray-500">GSTIN: 27AADCB2230M1Z2</p>
@@ -59,6 +59,25 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           <div className="text-right">
             <p className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Date</p>
             <p className="font-semibold">01 Aug 2026</p>
+          </div>
+        </div>
+
+        {/* Prescription Details Summary */}
+        <div className="mt-6 bg-gray-50 p-4 rounded-lg border border-gray-200">
+          <p className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-2 border-b pb-2">Prescription & Lens Details</p>
+          <div className="grid grid-cols-3 gap-4 text-sm mt-3">
+            <div>
+              <span className="text-gray-500 block mb-1">Lens Type:</span>
+              <span className="font-semibold">Polycarbonate, Progressive</span>
+            </div>
+            <div>
+              <span className="text-gray-500 block mb-1">Coating:</span>
+              <span className="font-semibold">ARC, Blue-cut</span>
+            </div>
+            <div>
+              <span className="text-gray-500 block mb-1">Frame Type:</span>
+              <span className="font-semibold">Half Frame</span>
+            </div>
           </div>
         </div>
 
@@ -129,7 +148,7 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
         
         {/* Footer */}
         <div className="pt-16 text-center text-sm text-gray-500 space-y-1">
-          <p>Thank you for choosing Lumière Optics!</p>
+          <p>Thank you for choosing FOKALS EYEWEARS!</p>
           <p>Goods once sold cannot be returned. Exchange available within 7 days.</p>
         </div>
         </div>

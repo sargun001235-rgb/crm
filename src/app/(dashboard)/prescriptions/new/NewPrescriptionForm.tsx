@@ -21,6 +21,10 @@ const sphOptions = ["", ...Array.from({ length: 161 }, (_, i) => formatPower((i 
 const cylOptions = ["", ...Array.from({ length: 81 }, (_, i) => formatPower((i - 40) * 0.25))];
 const axisOptions = ["", ...Array.from({ length: 181 }, (_, i) => i.toString())];
 const addOptions = ["", ...Array.from({ length: 17 }, (_, i) => formatPower(i * 0.25))];
+const vaOptions = ["6/60", "6/36", "6/24", "6/18", "6/12", "6/9", "6/6"];
+const lensTypeOptions = ["Fibre", "Glass", "Polycarbonate", "Bifocal", "Progressive", "Photochromatic"];
+const lensCoatingOptions = ["ARC", "Blue-cut", "Drivex"];
+const frameTypeOptions = ["Full Frame", "Half Frame", "Rimless Frame"];
 
 export default function NewPrescriptionForm({ customers }: { customers: any[] }) {
   const router = useRouter();
@@ -31,7 +35,7 @@ export default function NewPrescriptionForm({ customers }: { customers: any[] })
       customerId: "",
       re_sph: "", re_cyl: "", re_axis: "", re_add: "", re_prism: "", re_va: "",
       le_sph: "", le_cyl: "", le_axis: "", le_add: "", le_prism: "", le_va: "",
-      pd: "", lensType: "", frameType: "", lensCoating: "", doctor: "", remarks: ""
+      pd: "", lensType: [] as string[], frameType: "", lensCoating: [] as string[], doctor: "", remarks: ""
     }
   });
 
@@ -66,9 +70,9 @@ export default function NewPrescriptionForm({ customers }: { customers: any[] })
     formData.append("le_prism", data.le_prism);
     formData.append("le_va", data.le_va);
     formData.append("pd", data.pd);
-    formData.append("lensType", data.lensType);
+    formData.append("lensType", data.lensType.join(", "));
     formData.append("frameType", data.frameType);
-    formData.append("lensCoating", data.lensCoating);
+    formData.append("lensCoating", data.lensCoating.join(", "));
     formData.append("remarks", data.remarks);
 
     const result = await createPrescription(formData);
@@ -167,7 +171,18 @@ export default function NewPrescriptionForm({ customers }: { customers: any[] })
                   )} />
                 </div>
                 <div className="space-y-2"><Label>PRISM</Label><Input {...form.register("re_prism")} /></div>
-                <div className="space-y-2"><Label>VA</Label><Input {...form.register("re_va")} /></div>
+                <div className="space-y-2">
+                  <Label>VA</Label>
+                  <Controller name="re_va" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        {vaOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  )} />
+                </div>
               </div>
             </div>
 
@@ -213,17 +228,73 @@ export default function NewPrescriptionForm({ customers }: { customers: any[] })
                   )} />
                 </div>
                 <div className="space-y-2"><Label>PRISM</Label><Input {...form.register("le_prism")} /></div>
-                <div className="space-y-2"><Label>VA</Label><Input {...form.register("le_va")} /></div>
+                <div className="space-y-2">
+                  <Label>VA</Label>
+                  <Controller name="le_va" control={form.control} render={({ field }) => (
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <SelectTrigger><SelectValue placeholder="-" /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="none">None</SelectItem>
+                        {vaOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  )} />
+                </div>
               </div>
             </div>
 
             <Separator />
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-2"><Label>PD</Label><Input {...form.register("pd")} /></div>
-              <div className="space-y-2"><Label>Lens Type</Label><Input {...form.register("lensType")} placeholder="Progressive, Bifocal..." /></div>
-              <div className="space-y-2"><Label>Frame Type</Label><Input {...form.register("frameType")} placeholder="Full Rim, Half Rim..." /></div>
-              <div className="space-y-2"><Label>Lens Coating</Label><Input {...form.register("lensCoating")} placeholder="ARC, Blue Cut..." /></div>
+              
+              <div className="space-y-2">
+                <Label>Frame Type</Label>
+                <Controller name="frameType" control={form.control} render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger><SelectValue placeholder="Select Frame" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="none">None</SelectItem>
+                      {frameTypeOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                )} />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="space-y-3">
+                <Label>Lens Type</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {lensTypeOptions.map((opt) => (
+                    <label key={opt} className="flex items-center space-x-2 text-sm">
+                      <input 
+                        type="checkbox" 
+                        value={opt} 
+                        className="w-4 h-4 rounded border-gray-300"
+                        {...form.register("lensType")} 
+                      />
+                      <span>{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-3">
+                <Label>Lens Coating</Label>
+                <div className="grid grid-cols-2 gap-2">
+                  {lensCoatingOptions.map((opt) => (
+                    <label key={opt} className="flex items-center space-x-2 text-sm">
+                      <input 
+                        type="checkbox" 
+                        value={opt} 
+                        className="w-4 h-4 rounded border-gray-300"
+                        {...form.register("lensCoating")} 
+                      />
+                      <span>{opt}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
