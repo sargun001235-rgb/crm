@@ -21,6 +21,7 @@ const formSchema = z.object({
   dateOfBirth: z.string().optional(),
   medicalHistory: z.string().optional(),
   outstandingBalance: z.string().optional(),
+  dateAdded: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -41,6 +42,7 @@ export default function EditCustomerClient({ customer }: { customer: any }) {
       dateOfBirth: customer.date_of_birth || "",
       medicalHistory: customer.medical_history || "",
       outstandingBalance: customer.outstanding_balance?.toString() || "0",
+      dateAdded: customer.created_at ? new Date(customer.created_at).toISOString().split('T')[0] : "",
     },
   });
 
@@ -57,6 +59,9 @@ export default function EditCustomerClient({ customer }: { customer: any }) {
     formData.append("date_of_birth", data.dateOfBirth || "");
     formData.append("medical_history", data.medicalHistory || "");
     formData.append("outstanding_balance", data.outstandingBalance || "0");
+    if (data.dateAdded) {
+      formData.append("created_at", new Date(data.dateAdded).toISOString());
+    }
 
     const result = await updateCustomer(customer.id, formData);
     
@@ -133,9 +138,15 @@ export default function EditCustomerClient({ customer }: { customer: any }) {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="outstandingBalance">Opening Balance / Previous Dues (₹)</Label>
-              <Input id="outstandingBalance" type="number" step="0.01" {...form.register("outstandingBalance")} placeholder="0.00" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="outstandingBalance">Opening Balance / Previous Dues (₹)</Label>
+                <Input id="outstandingBalance" type="number" step="0.01" {...form.register("outstandingBalance")} placeholder="0.00" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dateAdded">Date Added</Label>
+                <Input id="dateAdded" type="date" {...form.register("dateAdded")} />
+              </div>
             </div>
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>

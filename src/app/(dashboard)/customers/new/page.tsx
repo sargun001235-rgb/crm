@@ -22,6 +22,7 @@ const formSchema = z.object({
   dateOfBirth: z.string().optional(),
   medicalHistory: z.string().optional(),
   outstandingBalance: z.string().optional(),
+  dateAdded: z.string().optional(),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -42,6 +43,7 @@ export default function NewCustomerPage() {
       dateOfBirth: "",
       medicalHistory: "",
       outstandingBalance: "0",
+      dateAdded: new Date().toISOString().split('T')[0],
     },
   });
 
@@ -58,6 +60,10 @@ export default function NewCustomerPage() {
     formData.append("date_of_birth", data.dateOfBirth || "");
     formData.append("medical_history", data.medicalHistory || "");
     formData.append("outstanding_balance", data.outstandingBalance || "0");
+    if (data.dateAdded) {
+      // Append current time to make it a valid timestamp if needed, or just send date
+      formData.append("created_at", new Date(data.dateAdded).toISOString());
+    }
 
     const result = await createCustomer(formData);
     
@@ -134,9 +140,15 @@ export default function NewCustomerPage() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="outstandingBalance">Opening Balance / Previous Dues (₹)</Label>
-              <Input id="outstandingBalance" type="number" step="0.01" {...form.register("outstandingBalance")} placeholder="0.00" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="outstandingBalance">Opening Balance / Previous Dues (₹)</Label>
+                <Input id="outstandingBalance" type="number" step="0.01" {...form.register("outstandingBalance")} placeholder="0.00" />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="dateAdded">Date Added</Label>
+                <Input id="dateAdded" type="date" {...form.register("dateAdded")} />
+              </div>
             </div>
 
             <Button type="submit" className="w-full" disabled={isSubmitting}>

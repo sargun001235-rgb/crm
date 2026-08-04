@@ -32,6 +32,7 @@ export async function createCustomer(formData: FormData) {
     date_of_birth: formData.get("date_of_birth") as string || null,
     medical_history: formData.get("medical_history") as string,
     outstanding_balance: parseFloat(formData.get("outstanding_balance") as string || "0") || 0,
+    ...(formData.get("created_at") && { created_at: formData.get("created_at") as string }),
   };
 
   const { data, error } = await supabase
@@ -77,6 +78,7 @@ export async function updateCustomer(id: string, formData: FormData) {
     date_of_birth: formData.get("date_of_birth") as string || null,
     medical_history: formData.get("medical_history") as string,
     outstanding_balance: parseFloat(formData.get("outstanding_balance") as string || "0") || 0,
+    ...(formData.get("created_at") && { created_at: formData.get("created_at") as string }),
   };
 
   const { data, error } = await supabase
