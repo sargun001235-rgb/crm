@@ -2,6 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function getPrescription(id: string) {
   const supabase = await createClient();
@@ -96,15 +97,15 @@ export async function createPrescription(formData: FormData) {
   return { data };
 }
 
-export async function deletePrescription(id: string) {
+export async function deletePrescription(id: string): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase.from("prescriptions").delete().eq("id", id);
   if (error) {
     console.error("Error deleting prescription:", error);
-    return { error: error.message };
+    throw new Error(error.message);
   }
   revalidatePath("/prescriptions");
-  return { success: true };
+  redirect("/prescriptions");
 }
 
 export async function updatePrescription(id: string, formData: FormData) {

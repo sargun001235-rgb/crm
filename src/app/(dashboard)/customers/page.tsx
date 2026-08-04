@@ -78,7 +78,10 @@ export default async function CustomersPage({ searchParams }: { searchParams: { 
                     <Link href={`/customers/${customer.id}/edit`} className={buttonVariants({ variant: "outline", size: "sm" })}>
                       <Edit2 className="h-4 w-4" />
                     </Link>
-                    <form action={deleteCustomer.bind(null, customer.id)} className="inline-block">
+                    <form action={async () => {
+                      "use server";
+                      await deleteCustomer(customer.id);
+                    }} className="inline-block">
                       <Button variant="destructive" size="sm" type="submit" onClick={(e) => {
                         if (!confirm('Are you sure you want to delete this customer?')) e.preventDefault();
                       }}>

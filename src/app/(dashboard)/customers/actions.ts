@@ -94,7 +94,7 @@ export async function updateCustomer(id: string, formData: FormData) {
   return { data };
 }
 
-export async function deleteCustomer(id: string) {
+export async function deleteCustomer(id: string): Promise<void> {
   const supabase = await createClient();
   const { error } = await supabase
     .from("customers")
@@ -103,7 +103,7 @@ export async function deleteCustomer(id: string) {
 
   if (error) {
     console.error("Error deleting customer:", error);
-    return { error: error.message };
+    throw new Error(error.message);
   }
 
   revalidatePath("/customers");
