@@ -95,3 +95,65 @@ export async function createPrescription(formData: FormData) {
   revalidatePath("/prescriptions");
   return { data };
 }
+
+export async function deletePrescription(id: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from("prescriptions").delete().eq("id", id);
+  if (error) {
+    console.error("Error deleting prescription:", error);
+    return { error: error.message };
+  }
+  revalidatePath("/prescriptions");
+  return { success: true };
+}
+
+export async function updatePrescription(id: string, formData: FormData) {
+  const supabase = await createClient();
+  
+  const customerId = formData.get("customerId") as string;
+  if (!customerId) return { error: "Customer selection is required." };
+  
+  const parseNum = (val: string | null) => (val && val !== "none" ? parseFloat(val) : null);
+  const parseStr = (val: string | null) => (val && val !== "none" ? val : null);
+
+  const lensTypeRaw = formData.get("lensType") as string;
+  const lensCoatingRaw = formData.get("lensCoating") as string;
+
+  const prescriptionData = {
+    customer_id: customerId,
+    doctor_name: parseStr(formData.get("doctor") as string),
+    re_sph: parseNum(formData.get("re_sph") as string),
+    re_cyl: parseNum(formData.get("re_cyl") as string),
+    re_axis: parseNum(formData.get("re_axis") as string),
+    re_add: parseNum(formData.get("re_add") as string),
+    re_prism: parseStr(formData.get("re_prism") as string),
+    re_va: parseStr(formData.get("re_va") as string),
+    le_sph: parseNum(formData.get("le_sph") as string),
+    le_cyl: parseNum(formData.get("le_cyl") as string),
+    le_axis: parseNum(formData.get("le_axis") as string),
+    le_add: parseNum(formData.get("le_add") as string),
+    le_prism: parseStr(formData.get("le_prism") as string),
+    le_va: parseStr(formData.get("le_va") as string),
+    pd: parseStr(formData.get("pd") as string),
+    lens_type: lensTypeRaw || null,
+    frame_type: parseStr(formData.get("frameType") as string),
+    lens_coating: lensCoatingRaw || null,
+    remarks: parseStr(formData.get("remarks") as string),
+  };
+
+  const { data, error } = await supabase
+    .from("prescriptions")
+    .update(prescriptionData)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Error updating prescription:", error);
+    return { error: error.message };
+  }
+
+  revalidatePath("/prescriptions");
+  revalidatePath(`/prescriptions/${id}`);
+  return { data };
+}

@@ -3,9 +3,10 @@
 import { useRef } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, Printer } from "lucide-react";
+import { ArrowLeft, Printer, Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
+import { deletePrescription } from "../actions";
 
 export default function PrescriptionClient({ prescription }: { prescription: any }) {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -28,6 +29,18 @@ export default function PrescriptionClient({ prescription }: { prescription: any
           <h1 className="text-3xl font-bold tracking-tight">Prescription Details</h1>
         </div>
         <div className="flex space-x-2">
+          <Link href={`/prescriptions/${prescription.id}/edit`} className={buttonVariants({ variant: "outline" })}>
+            <Edit2 className="mr-2 h-4 w-4" />
+            Edit
+          </Link>
+          <form action={deletePrescription.bind(null, prescription.id)}>
+            <Button variant="destructive" type="submit" onClick={(e) => {
+              if (!confirm('Are you sure you want to delete this prescription?')) e.preventDefault();
+            }}>
+              <Trash2 className="mr-2 h-4 w-4" />
+              Delete
+            </Button>
+          </form>
           <Button variant="default" onClick={() => handlePrint()}>
             <Printer className="mr-2 h-4 w-4" />
             Print Prescription

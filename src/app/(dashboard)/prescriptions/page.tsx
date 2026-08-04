@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus, Search, Eye } from "lucide-react";
+import { Plus, Search, Eye, Edit2, Trash2 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Prescription } from "@/types/database.types";
-import { getPrescriptions } from "./actions";
+import { getPrescriptions, deletePrescription } from "./actions";
 
 export default async function PrescriptionsPage() {
   const prescriptions = await getPrescriptions();
@@ -64,11 +64,20 @@ export default async function PrescriptionsPage() {
                   <TableCell>{new Date(rx.created_at).toLocaleDateString()}</TableCell>
                   <TableCell>{rx.doctor_name || "Dr. Admin"}</TableCell>
                   <TableCell>{rx.lens_type || "-"}</TableCell>
-                  <TableCell className="text-right">
+                  <TableCell className="text-right space-x-2 whitespace-nowrap">
                     <Link href={`/prescriptions/${rx.id}`} className={buttonVariants({ variant: "ghost", size: "sm" })}>
-                      <Eye className="mr-2 h-4 w-4" />
-                      View
+                      <Eye className="h-4 w-4" />
                     </Link>
+                    <Link href={`/prescriptions/${rx.id}/edit`} className={buttonVariants({ variant: "outline", size: "sm" })}>
+                      <Edit2 className="h-4 w-4" />
+                    </Link>
+                    <form action={deletePrescription.bind(null, rx.id)} className="inline-block">
+                      <Button variant="destructive" size="sm" type="submit" onClick={(e) => {
+                        if (!confirm('Are you sure you want to delete this prescription?')) e.preventDefault();
+                      }}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </form>
                   </TableCell>
                 </TableRow>
               ))

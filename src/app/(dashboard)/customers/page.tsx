@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, Edit2, Trash2 } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import CustomerSearch from "./CustomerSearch";
 import {
@@ -11,7 +11,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Customer } from "@/types/database.types";
-import { getCustomers } from "./actions";
+import { getCustomers, deleteCustomer } from "./actions";
+import DeleteCustomerButton from "./[id]/DeleteCustomerButton";
 
 export default async function CustomersPage({ searchParams }: { searchParams: { q?: string } }) {
   let customers = await getCustomers();
@@ -49,6 +50,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: { 
               <TableHead>City</TableHead>
               <TableHead className="text-right">Lifetime Spending</TableHead>
               <TableHead className="text-right">Balance</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -71,6 +73,18 @@ export default async function CustomersPage({ searchParams }: { searchParams: { 
                   <TableCell className="text-right">₹{customer.lifetime_spending}</TableCell>
                   <TableCell className="text-right text-destructive font-medium">
                     {customer.outstanding_balance > 0 ? `₹${customer.outstanding_balance}` : "₹0"}
+                  </TableCell>
+                  <TableCell className="text-right space-x-2">
+                    <Link href={`/customers/${customer.id}/edit`} className={buttonVariants({ variant: "outline", size: "sm" })}>
+                      <Edit2 className="h-4 w-4" />
+                    </Link>
+                    <form action={deleteCustomer.bind(null, customer.id)} className="inline-block">
+                      <Button variant="destructive" size="sm" type="submit" onClick={(e) => {
+                        if (!confirm('Are you sure you want to delete this customer?')) e.preventDefault();
+                      }}>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </form>
                   </TableCell>
                 </TableRow>
               ))
