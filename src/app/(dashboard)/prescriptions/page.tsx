@@ -14,8 +14,12 @@ import { Prescription } from "@/types/database.types";
 import { getPrescriptions, deletePrescription } from "./actions";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 
-export default async function PrescriptionsPage() {
-  const prescriptions = await getPrescriptions();
+import PrescriptionSearch from "./PrescriptionSearch";
+
+export default async function PrescriptionsPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const resolvedParams = await searchParams;
+  const query = resolvedParams?.q || "";
+  const prescriptions = await getPrescriptions(query);
 
   return (
     <div className="space-y-6">
@@ -28,14 +32,7 @@ export default async function PrescriptionsPage() {
       </div>
 
       <div className="flex items-center space-x-2">
-        <div className="relative flex-1 max-w-md">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search by customer name or ID..."
-            className="pl-8"
-          />
-        </div>
+        <PrescriptionSearch />
       </div>
 
       <div className="rounded-md border bg-card">

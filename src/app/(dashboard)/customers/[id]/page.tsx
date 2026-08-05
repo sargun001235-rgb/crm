@@ -7,11 +7,13 @@ import Link from "next/link";
 import DeleteCustomerButton from "./DeleteCustomerButton";
 
 import { getCustomer, deleteCustomer } from "../actions";
+import { getCustomerPrescriptions } from "@/app/(dashboard)/prescriptions/actions";
 import { notFound } from "next/navigation";
 
 export default async function CustomerProfilePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const customer = await getCustomer(id);
+  const prescriptions = await getCustomerPrescriptions(id);
 
   if (!customer) {
     notFound();
@@ -104,11 +106,35 @@ export default async function CustomerProfilePage({ params }: { params: Promise<
             </TabsList>
             
             <TabsContent value="prescriptions" className="p-4 border rounded-b-md mt-0 bg-card">
-              <div className="text-center py-10 text-muted-foreground">
-                <FileText className="mx-auto h-10 w-10 opacity-20 mb-4" />
-                <p>No prescriptions found.</p>
-                <Link href="/prescriptions/new" className={buttonVariants({ variant: "outline", className: "mt-4" })}>Add Prescription</Link>
-              </div>
+              {prescriptions.length === 0 ? (
+                <div className="text-center py-10 text-muted-foreground">
+                  <FileText className="mx-auto h-10 w-10 opacity-20 mb-4" />
+                  <p>No prescriptions found.</p>
+                  <Link href="/prescriptions/new" className={buttonVariants({ variant: "outline", className: "mt-4" })}>Add Prescription</Link>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <h3 className="font-medium">Prescription History</h3>
+                    <Link href="/prescriptions/new" className={buttonVariants({ variant: "outline", size: "sm" })}>
+                      <Plus className="mr-2 h-4 w-4" /> Add
+                    </Link>
+                  </div>
+                  <div className="space-y-4">
+                    {prescriptions.map((rx: any) => (
+                      <div key={rx.id} className="flex justify-between items-center p-4 border rounded-md">
+                        <div>
+                          <p className="font-medium">{new Date(rx.created_at).toLocaleDateString()} - {rx.doctor_name || "Dr. Admin"}</p>
+                          <p className="text-sm text-muted-foreground">Lens: {rx.lens_type || "-"} | Frame: {rx.frame_type || "-"}</p>
+                        </div>
+                        <Link href={`/prescriptions/${rx.id}`} className={buttonVariants({ variant: "default", size: "sm" })}>
+                          View
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </TabsContent>
             
             <TabsContent value="orders" className="p-4 border rounded-b-md mt-0 bg-card">

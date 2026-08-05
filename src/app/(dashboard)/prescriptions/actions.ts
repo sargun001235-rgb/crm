@@ -30,7 +30,38 @@ export async function getPrescription(id: string) {
   };
 }
 
-export async function getPrescriptions() {
+export async function getPrescriptions(query?: string) {
+  const supabase = await createClient();
+  
+  let dbQuery = supabase
+    .from("prescriptions")
+    .select(`
+      *,
+      customers!inner (
+        first_name,
+        last_name,
+        phone
+      )
+    `)
+    .order("created_at", { ascending: false });
+
+  if (query) {
+    dbQuery = dbQuery.or(`first_name.ilike.%${query}%,last_name.ilike.%${query}%,phone.ilike.%${query}%`, { referencedTable: 'customers' });
+  }
+
+  const { data, error } = await dbQuery;
+
+  if (error) {
+    console.error("Error fetching prescriptions:", error);
+    return [];
+  }
+  return data.map((rx: any) => ({
+    ...rx,
+    customer_name: `${rx.customers?.first_name || ""} ${rx.customers?.last_name || ""}`.trim()
+  }));
+}
+
+export async function getCustomerPrescriptions(customerId: string) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("prescriptions")
@@ -41,10 +72,11 @@ export async function getPrescriptions() {
         last_name
       )
     `)
+    .eq("customer_id", customerId)
     .order("created_at", { ascending: false });
 
   if (error) {
-    console.error("Error fetching prescriptions:", error);
+    console.error("Error fetching customer prescriptions:", error);
     return [];
   }
   return data.map((rx: any) => ({

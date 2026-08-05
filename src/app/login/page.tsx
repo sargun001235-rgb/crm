@@ -30,7 +30,7 @@ export default function LoginPage() {
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-primary-foreground">
               <EyeIcon className="h-6 w-6" />
             </div>
-            <CardTitle className="text-2xl font-bold tracking-tight">Amritsar Eyeclinic</CardTitle>
+            <CardTitle className="text-2xl font-bold tracking-tight">Amritsar Eye Clinic</CardTitle>
             <CardDescription>
               Enter your admin credentials to access the system
             </CardDescription>

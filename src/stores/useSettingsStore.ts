@@ -15,7 +15,7 @@ interface SettingsState {
 export const useSettingsStore = create<SettingsState>()(
   persist(
     (set) => ({
-      storeName: "Amritsar Eyeclinic",
+      storeName: "Amritsar Eye Clinic",
       address: "Shahheed Udham Singh Nagar Main Bazar Street No.3",
       phone: "9915930068, 7340710332",
       gstin: "27AADCB2230M1Z2",

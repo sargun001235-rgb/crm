@@ -8,6 +8,12 @@ import Link from "next/link";
 import { useReactToPrint } from "react-to-print";
 import { deletePrescription } from "../actions";
 
+const formatPower = (num: number | null) => {
+  if (num === null || num === undefined) return "-";
+  if (num === 0) return "0.00";
+  return num > 0 ? `+${num.toFixed(2)}` : num.toFixed(2);
+};
+
 export default function PrescriptionClient({ prescription }: { prescription: any }) {
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
@@ -55,7 +61,7 @@ export default function PrescriptionClient({ prescription }: { prescription: any
               <CardTitle className="text-xl font-bold flex items-center space-x-2">
                 <Eye className="w-6 h-6 text-black" />
                 <div className="flex flex-col">
-                  <span>Amritsar Eyeclinic</span>
+                  <span>Amritsar Eye Clinic</span>
                   <span className="text-xs font-normal text-gray-500 mt-1">Shahheed Udham Singh Nagar Main Bazar Street No.3</span>
                   <span className="text-xs font-normal text-gray-500">Phone: 9915930068, 7340710332</span>
                 </div>
@@ -86,19 +92,19 @@ export default function PrescriptionClient({ prescription }: { prescription: any
                   <tbody className="divide-y divide-black">
                     <tr>
                       <td className="px-4 py-3 font-bold text-left border-r border-black">Right (OD)</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.re_sph || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.re_cyl || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{formatPower(prescription.re_sph)}</td>
+                      <td className="px-4 py-3 border-r border-black">{formatPower(prescription.re_cyl)}</td>
                       <td className="px-4 py-3 border-r border-black">{prescription.re_axis || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.re_add || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{formatPower(prescription.re_add)}</td>
                       <td className="px-4 py-3 border-r border-black">{prescription.re_prism || "-"}</td>
                       <td className="px-4 py-3">{prescription.re_va || "-"}</td>
                     </tr>
                     <tr>
                       <td className="px-4 py-3 font-bold text-left border-r border-black">Left (OS)</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.le_sph || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.le_cyl || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{formatPower(prescription.le_sph)}</td>
+                      <td className="px-4 py-3 border-r border-black">{formatPower(prescription.le_cyl)}</td>
                       <td className="px-4 py-3 border-r border-black">{prescription.le_axis || "-"}</td>
-                      <td className="px-4 py-3 border-r border-black">{prescription.le_add || "-"}</td>
+                      <td className="px-4 py-3 border-r border-black">{formatPower(prescription.le_add)}</td>
                       <td className="px-4 py-3 border-r border-black">{prescription.le_prism || "-"}</td>
                       <td className="px-4 py-3">{prescription.le_va || "-"}</td>
                     </tr>
