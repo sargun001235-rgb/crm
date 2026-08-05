@@ -11,9 +11,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Customer } from "@/types/database.types";
-import { getCustomers, deleteCustomer } from "./actions";
-import DeleteCustomerButton from "./[id]/DeleteCustomerButton";
-import { DeleteButton } from "@/components/ui/DeleteButton";
+import { getCustomers } from "./actions";
+import { CustomerRowWithPrescriptions } from "./CustomerRowWithPrescriptions";
 
 export default async function CustomersPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const resolvedSearchParams = await searchParams;
@@ -64,30 +63,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
               </TableRow>
             ) : (
               customers.map((customer) => (
-                <TableRow key={customer.id}>
-                  <TableCell className="font-medium">
-                    <Link href={`/customers/${customer.id}`} className="hover:underline text-primary">
-                      {customer.first_name} {customer.last_name}
-                    </Link>
-                  </TableCell>
-                  <TableCell>{customer.phone}</TableCell>
-                  <TableCell>{customer.city}</TableCell>
-                  <TableCell className="text-right">₹{customer.lifetime_spending}</TableCell>
-                  <TableCell className="text-right text-destructive font-medium">
-                    {customer.outstanding_balance > 0 ? `₹${customer.outstanding_balance}` : "₹0"}
-                  </TableCell>
-                  <TableCell className="text-right space-x-2">
-                    <Link href={`/customers/${customer.id}/edit`} className={buttonVariants({ variant: "outline", size: "sm" })}>
-                      <Edit2 className="h-4 w-4" />
-                    </Link>
-                    <form action={async () => {
-                      "use server";
-                      await deleteCustomer(customer.id);
-                    }} className="inline-block">
-                      <DeleteButton iconOnly text="customer" />
-                    </form>
-                  </TableCell>
-                </TableRow>
+                <CustomerRowWithPrescriptions key={customer.id} customer={customer} />
               ))
             )}
           </TableBody>

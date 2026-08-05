@@ -9,7 +9,7 @@ export async function getCustomers() {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("customers")
-    .select("*")
+    .select("*, prescriptions(*)")
     .order("created_at", { ascending: false });
 
   if (error) {
