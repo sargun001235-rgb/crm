@@ -132,9 +132,15 @@ export default function PrescriptionClient({ prescription }: { prescription: any
               </div>
             </div>
 
-            <div>
-               <p className="text-xs font-bold text-gray-500 uppercase">Remarks</p>
-               <p className="font-medium mt-1">{prescription.remarks || "No remarks."}</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                 <p className="text-xs font-bold text-gray-500 uppercase">Remarks</p>
+                 <p className="font-medium mt-1">{prescription.remarks || "No remarks."}</p>
+              </div>
+              <div className="text-right">
+                 <p className="text-xs font-bold text-gray-500 uppercase">Price</p>
+                 <p className="font-medium mt-1 text-lg">₹{prescription.price || "0.00"}</p>
+              </div>
             </div>
 
             <div className="pt-8 space-y-4">

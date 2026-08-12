@@ -114,6 +114,7 @@ export async function createPrescription(formData: FormData) {
     frame_type: parseStr(formData.get("frameType") as string),
     lens_coating: parseStr(formData.get("lensCoating") as string),
     remarks: parseStr(formData.get("remarks") as string),
+    price: parseNum(formData.get("price") as string) || 0,
   };
 
   const { data, error } = await supabase
@@ -174,6 +175,7 @@ export async function updatePrescription(id: string, formData: FormData) {
     frame_type: parseStr(formData.get("frameType") as string),
     lens_coating: lensCoatingRaw || null,
     remarks: parseStr(formData.get("remarks") as string),
+    price: parseNum(formData.get("price") as string) || 0,
   };
 
   const { data, error } = await supabase

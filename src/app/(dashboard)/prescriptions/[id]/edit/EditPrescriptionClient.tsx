@@ -46,11 +46,12 @@ export default function EditPrescriptionClient({ customers, prescription }: { cu
       le_prism: prescription.le_prism || "", 
       le_va: prescription.le_va || "",
       pd: prescription.pd || "", 
-      lensType: prescription.lens_type ? prescription.lens_type.split(",").map((s: string) => s.trim()) : [] as string[], 
+      lensType: prescription.lens_type || "", 
       frameType: prescription.frame_type || "", 
-      lensCoating: prescription.lens_coating ? prescription.lens_coating.split(",").map((s: string) => s.trim()) : [] as string[], 
+      lensCoating: prescription.lens_coating || "", 
       doctor: prescription.doctor_name || "", 
-      remarks: prescription.remarks || ""
+      remarks: prescription.remarks || "",
+      price: prescription.price?.toString() || ""
     }
   });
 
@@ -85,10 +86,11 @@ export default function EditPrescriptionClient({ customers, prescription }: { cu
     formData.append("le_prism", data.le_prism);
     formData.append("le_va", data.le_va);
     formData.append("pd", data.pd);
-    formData.append("lensType", data.lensType.join(", "));
+    formData.append("lensType", data.lensType);
     formData.append("frameType", data.frameType);
-    formData.append("lensCoating", data.lensCoating.join(", "));
+    formData.append("lensCoating", data.lensCoating);
     formData.append("remarks", data.remarks);
+    formData.append("price", data.price || "0");
 
     const result = await updatePrescription(prescription.id, formData);
     
@@ -265,54 +267,31 @@ export default function EditPrescriptionClient({ customers, prescription }: { cu
               
               <div className="space-y-2">
                 <Label>Frame Type</Label>
-                <Controller name="frameType" control={form.control} render={({ field }) => (
-                  <Select onValueChange={field.onChange} value={field.value}>
-                    <SelectTrigger><SelectValue placeholder="Select Frame" /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="none">None</SelectItem>
-                      {frameTypeOptions.map(o => <SelectItem key={o} value={o}>{o}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                )} />
+                <Input list="frameTypeOptionsList" {...form.register("frameType")} placeholder="Type or select..." />
+                <datalist id="frameTypeOptionsList">
+                  {frameTypeOptions.map(o => <option key={o} value={o} />)}
+                </datalist>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <Label>Lens Type</Label>
-                <div className="grid grid-cols-2 gap-2">
-                  {lensTypeOptions.map((opt) => (
-                    <label key={opt} className="flex items-center space-x-2 text-sm">
-                      <input 
-                        type="checkbox" 
-                        value={opt} 
-                        className="w-4 h-4 rounded border-gray-300"
-                        {...form.register("lensType")} 
-                      />
-                      <span>{opt}</span>
-                    </label>
-                  ))}
-                </div>
+                <Input list="lensTypeOptionsList" {...form.register("lensType")} placeholder="Type or select..." />
+                <datalist id="lensTypeOptionsList">
+                  {lensTypeOptions.map(o => <option key={o} value={o} />)}
+                </datalist>
               </div>
               <div className="space-y-3">
                 <Label>Lens Coating</Label>
-                <div className="grid grid-cols-2 gap-2">
-                  {lensCoatingOptions.map((opt) => (
-                    <label key={opt} className="flex items-center space-x-2 text-sm">
-                      <input 
-                        type="checkbox" 
-                        value={opt} 
-                        className="w-4 h-4 rounded border-gray-300"
-                        {...form.register("lensCoating")} 
-                      />
-                      <span>{opt}</span>
-                    </label>
-                  ))}
-                </div>
+                <Input list="lensCoatingOptionsList" {...form.register("lensCoating")} placeholder="Type or select..." />
+                <datalist id="lensCoatingOptionsList">
+                  {lensCoatingOptions.map(o => <option key={o} value={o} />)}
+                </datalist>
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                <div className="space-y-2">
                  <Label>Doctor / Optometrist</Label>
                  <Controller name="doctor" control={form.control} render={({ field }) => (
@@ -328,6 +307,7 @@ export default function EditPrescriptionClient({ customers, prescription }: { cu
                  )} />
                </div>
                <div className="space-y-2"><Label>Remarks</Label><Input {...form.register("remarks")} /></div>
+               <div className="space-y-2"><Label>Price (₹)</Label><Input type="number" step="0.01" {...form.register("price")} placeholder="0.00" /></div>
             </div>
           </CardContent>
         </Card>
