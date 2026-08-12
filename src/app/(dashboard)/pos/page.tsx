@@ -10,7 +10,9 @@ import { Separator } from "@/components/ui/separator";
 import { CheckoutModal } from "@/components/pos/CheckoutModal";
 import { CustomProductModal } from "@/components/pos/CustomProductModal";
 import { getInventory } from "@/app/(dashboard)/inventory/actions";
-import { Inventory } from "@/types/database.types";
+import { getCustomers } from "@/app/(dashboard)/customers/actions";
+import { Inventory, Customer } from "@/types/database.types";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function POSPage() {
   const { cart, addToCart, removeFromCart, updateQuantity, discount, setDiscount, selectedCustomer } = usePosStore();
@@ -18,10 +20,12 @@ export default function POSPage() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
   const [inventory, setInventory] = useState<Inventory[]>([]);
+  const [customers, setCustomers] = useState<Customer[]>([]);
 
   import("react").then((React) => {
     React.useEffect(() => {
       getInventory().then(data => setInventory(data));
+      getCustomers().then(data => setCustomers(data));
     }, []);
   });
 
@@ -79,9 +83,29 @@ export default function POSPage() {
               {selectedCustomer ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}` : "Walk-in Customer"}
             </p>
           </div>
-          <Button variant="outline" size="icon" title="Add Customer">
-            <UserPlus className="h-4 w-4" />
-          </Button>
+          <div className="w-[180px]">
+            <Select 
+              value={selectedCustomer?.id || "none"} 
+              onValueChange={(val) => {
+                if (val === "none") {
+                  usePosStore.setState({ selectedCustomer: null });
+                } else {
+                  const cust = customers.find(c => c.id === val);
+                  if (cust) usePosStore.setState({ selectedCustomer: cust });
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Customer" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Walk-in Customer</SelectItem>
+                {customers.map(c => (
+                  <SelectItem key={c.id} value={c.id}>{c.first_name} {c.last_name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
