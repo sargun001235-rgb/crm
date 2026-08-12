@@ -9,6 +9,7 @@ import { Search, UserPlus, Trash2, Plus, Minus, CreditCard } from "lucide-react"
 import { Separator } from "@/components/ui/separator";
 import { CheckoutModal } from "@/components/pos/CheckoutModal";
 import { CustomProductModal } from "@/components/pos/CustomProductModal";
+import { AddCustomerModal } from "@/components/pos/AddCustomerModal";
 import { getInventory } from "@/app/(dashboard)/inventory/actions";
 import { getCustomers } from "@/app/(dashboard)/customers/actions";
 import { Inventory, Customer } from "@/types/database.types";
@@ -19,6 +20,7 @@ export default function POSPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isCustomOpen, setIsCustomOpen] = useState(false);
+  const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
   const [inventory, setInventory] = useState<Inventory[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
 
@@ -76,14 +78,20 @@ export default function POSPage() {
 
       {/* Right Panel: Cart */}
       <div className="w-[400px] flex flex-col border rounded-lg bg-card">
-        <div className="p-4 border-b bg-muted/20 flex justify-between items-center">
-          <div>
-            <h2 className="font-semibold text-lg">Current Sale</h2>
-            <p className="text-sm text-muted-foreground">
-              {selectedCustomer ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}` : "Walk-in Customer"}
-            </p>
+        <div className="p-4 border-b bg-muted/20 flex flex-col gap-3">
+          <div className="flex justify-between items-start">
+            <div>
+              <h2 className="font-semibold text-lg">Current Sale</h2>
+              <p className="text-sm text-muted-foreground">
+                {selectedCustomer ? `${selectedCustomer.first_name} ${selectedCustomer.last_name}` : "Walk-in Customer"}
+              </p>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => setIsAddCustomerOpen(true)} className="h-8">
+              <UserPlus className="mr-2 h-4 w-4" />
+              New Customer
+            </Button>
           </div>
-          <div className="w-[180px]">
+          <div className="w-full">
             <Select 
               value={selectedCustomer?.id || "none"} 
               onValueChange={(val) => {
@@ -173,6 +181,14 @@ export default function POSPage() {
       
       <CheckoutModal open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen} total={total} />
       <CustomProductModal open={isCustomOpen} onOpenChange={setIsCustomOpen} />
+      <AddCustomerModal 
+        open={isAddCustomerOpen} 
+        onOpenChange={setIsAddCustomerOpen} 
+        onCustomerAdded={(customer) => {
+          setCustomers(prev => [customer, ...prev]);
+          usePosStore.setState({ selectedCustomer: customer });
+        }} 
+      />
     </div>
   );
 }
