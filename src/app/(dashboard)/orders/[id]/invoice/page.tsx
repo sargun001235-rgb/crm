@@ -1,21 +1,34 @@
 "use client";
 
-import { use, useRef } from "react";
+import { use, useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Printer, ArrowLeft, Eye } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import { useReactToPrint } from "react-to-print";
+import { getOrder } from "../../actions";
 
 export default function InvoicePrintPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const { id } = use(params);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [order, setOrder] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getOrder(id).then(data => {
+      setOrder(data);
+      setLoading(false);
+    });
+  }, [id]);
   
   const handlePrint = useReactToPrint({
     contentRef: contentRef,
-    documentTitle: `Invoice_${id}`
+    documentTitle: `Invoice_${order?.order_number || id}`
   });
+
+  if (loading) return <div className="p-8 text-center">Loading Invoice...</div>;
+  if (!order) return <div className="p-8 text-center text-red-500">Order not found.</div>;
 
   return (
     <div className="min-h-screen bg-white text-black p-8 print:p-0">
@@ -37,7 +50,7 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           <div className="flex justify-between items-start">
           <div>
             <h1 className="text-4xl font-bold text-black">INVOICE</h1>
-            <p className="text-gray-500 mt-1">Order # {id.toUpperCase()}</p>
+            <p className="text-gray-500 mt-1">Order # {order.order_number}</p>
           </div>
           <div className="text-right">
             <h2 className="text-2xl font-bold tracking-tight flex items-center justify-end space-x-2">
@@ -58,14 +71,14 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
         <div className="flex justify-between">
           <div>
             <p className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Bill To</p>
-            <p className="font-semibold text-lg">Rahul Sharma</p>
-            <p className="text-gray-600">Phone: +91 99887 77665</p>
+            <p className="font-semibold text-lg">{order.customers?.first_name} {order.customers?.last_name}</p>
+            <p className="text-gray-600">Phone: {order.customers?.phone}</p>
           </div>
           <div className="text-right">
             <p className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-1">Date</p>
-            <p className="font-semibold">01 Aug 2026</p>
+            <p className="font-semibold">{new Date(order.created_at).toLocaleDateString()}</p>
             <div className="mt-2 inline-block px-3 py-1 bg-gray-100 border border-gray-300 rounded font-bold text-sm">
-              Status: POSTPAID (Balance Due)
+              Status: {order.status.toUpperCase()}
             </div>
           </div>
         </div>
@@ -101,24 +114,17 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              <tr>
-                <td className="py-4">
-                  <p className="font-semibold text-black">Ray-Ban Aviator Classic</p>
-                  <p className="text-sm text-gray-500">FRM-RB-3025</p>
-                </td>
-                <td className="py-4 text-center text-black">1</td>
-                <td className="py-4 text-right text-black">₹8,500.00</td>
-                <td className="py-4 text-right font-medium text-black">₹8,500.00</td>
-              </tr>
-              <tr>
-                <td className="py-4">
-                  <p className="font-semibold text-black">Zeiss ClearView 1.56</p>
-                  <p className="text-sm text-gray-500">LNS-CZ-156</p>
-                </td>
-                <td className="py-4 text-center text-black">1</td>
-                <td className="py-4 text-right text-black">₹2,500.00</td>
-                <td className="py-4 text-right font-medium text-black">₹2,500.00</td>
-              </tr>
+              {order.order_items?.map((item: any) => (
+                <tr key={item.id}>
+                  <td className="py-4">
+                    <p className="font-semibold text-black">{item.inventory?.brand} {item.inventory?.model}</p>
+                    <p className="text-sm text-gray-500">{item.inventory?.sku || "Custom Item"}</p>
+                  </td>
+                  <td className="py-4 text-center text-black">{item.quantity}</td>
+                  <td className="py-4 text-right text-black">₹{item.unit_price.toFixed(2)}</td>
+                  <td className="py-4 text-right font-medium text-black">₹{item.total_price.toFixed(2)}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -128,35 +134,37 @@ export default function InvoicePrintPage({ params }: { params: Promise<{ id: str
           <div className="w-64 space-y-3">
             <div className="flex justify-between text-gray-600">
               <span>Subtotal</span>
-              <span>₹11,000.00</span>
+              <span>₹{order.subtotal.toFixed(2)}</span>
             </div>
-            <div className="flex justify-between text-gray-600">
-              <span>Discount</span>
-              <span>-₹500.00</span>
-            </div>
+            {order.discount > 0 && (
+              <div className="flex justify-between text-gray-600">
+                <span>Discount</span>
+                <span>-₹{order.discount.toFixed(2)}</span>
+              </div>
+            )}
             <div className="flex justify-between text-gray-600">
               <span>GST (18%)</span>
-              <span>₹1,890.00</span>
+              <span>₹{order.gst_amount.toFixed(2)}</span>
             </div>
             <Separator className="bg-black/10 my-2" />
             <div className="flex justify-between text-xl font-bold text-black">
               <span>Total</span>
-              <span>₹12,390.00</span>
+              <span>₹{order.total_amount.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-gray-600">
               <span>Advance Paid</span>
-              <span>₹5,000.00</span>
+              <span>₹{order.advance_paid.toFixed(2)}</span>
             </div>
             <div className="flex justify-between font-bold text-black border-t-2 border-black pt-2 mt-2">
               <span>Balance Due</span>
-              <span>₹7,390.00</span>
+              <span>₹{order.balance_due.toFixed(2)}</span>
             </div>
           </div>
         </div>
         
         {/* Footer */}
         <div className="pt-8 mt-12 border-t border-gray-200 text-center text-sm text-gray-500 space-y-4">
-          <p className="font-bold text-black text-lg">Total Billed Amount: ₹12,390.00</p>
+          <p className="font-bold text-black text-lg">Total Billed Amount: ₹{order.total_amount.toFixed(2)}</p>
           
           <div className="bg-gray-100 p-4 rounded-lg border border-black text-black space-y-1 inline-block">
              <p className="font-semibold text-primary">A routine eye examination is recommended after 6 months to monitor your vision, detect any changes early, and maintain good eye health.</p>

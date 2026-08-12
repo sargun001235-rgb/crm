@@ -8,27 +8,31 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Search, UserPlus, Trash2, Plus, Minus, CreditCard } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { CheckoutModal } from "@/components/pos/CheckoutModal";
-
-// Mock Inventory Data for POS
-const mockProducts = [
-  { id: "1", sku: "FRM-RB-3025", category: "Frames", brand: "Ray-Ban", model: "Aviator Classic", selling_price: 8500, stock_quantity: 12, barcode: "8053672000000", purchase_price: 4500, low_stock_threshold: 5, color: "Gold", created_at: "", updated_at: "", created_by: null },
-  { id: "2", sku: "LNS-CZ-156", category: "Lenses", brand: "Zeiss", model: "ClearView 1.56", selling_price: 2500, stock_quantity: 3, barcode: "8053672000001", purchase_price: 800, low_stock_threshold: 5, color: "Clear", created_at: "", updated_at: "", created_by: null },
-];
+import { CustomProductModal } from "@/components/pos/CustomProductModal";
+import { getInventory } from "@/app/(dashboard)/inventory/actions";
+import { Inventory } from "@/types/database.types";
 
 export default function POSPage() {
   const { cart, addToCart, removeFromCart, updateQuantity, discount, setDiscount, selectedCustomer } = usePosStore();
   const [searchTerm, setSearchTerm] = useState("");
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isCustomOpen, setIsCustomOpen] = useState(false);
+  const [inventory, setInventory] = useState<Inventory[]>([]);
+
+  import("react").then((React) => {
+    React.useEffect(() => {
+      getInventory().then(data => setInventory(data));
+    }, []);
+  });
 
   const subtotal = cart.reduce((acc, item) => acc + item.selling_price * item.cart_quantity, 0);
   const gst = subtotal * 0.18; // 18% GST (Example)
   const total = subtotal + gst - discount;
 
-  // Filter products
-  const products = mockProducts.filter(p => 
-    p.sku.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    p.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    p.model.toLowerCase().includes(searchTerm.toLowerCase())
+  const products = inventory.filter(p => 
+    (p.sku && p.sku.toLowerCase().includes(searchTerm.toLowerCase())) || 
+    (p.brand && p.brand.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (p.model && p.model.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   return (
@@ -46,6 +50,10 @@ export default function POSPage() {
               autoFocus
             />
           </div>
+          <Button variant="default" className="shrink-0" onClick={() => setIsCustomOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" />
+            Custom Item
+          </Button>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 overflow-y-auto pb-4">
@@ -140,6 +148,7 @@ export default function POSPage() {
       </div>
       
       <CheckoutModal open={isCheckoutOpen} onOpenChange={setIsCheckoutOpen} total={total} />
+      <CustomProductModal open={isCustomOpen} onOpenChange={setIsCustomOpen} />
     </div>
   );
 }

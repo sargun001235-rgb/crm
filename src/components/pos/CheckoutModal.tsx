@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { usePosStore } from "@/stores/usePosStore";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CheckCircle2 } from "lucide-react";
+import { createOrder } from "@/app/(dashboard)/orders/actions";
+import { useRouter } from "next/navigation";
 
 interface CheckoutModalProps {
   open: boolean;
@@ -16,20 +18,56 @@ interface CheckoutModalProps {
 }
 
 export function CheckoutModal({ open, onOpenChange, total }: CheckoutModalProps) {
-  const { advancePaid, setAdvancePaid, clearCart, selectedCustomer } = usePosStore();
+  const { cart, advancePaid, setAdvancePaid, clearCart, selectedCustomer } = usePosStore();
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const router = useRouter();
 
   const balance = total - advancePaid;
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
+    if (!selectedCustomer) {
+      alert("Please select a customer first.");
+      return;
+    }
+    
     setIsProcessing(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsProcessing(false);
+    
+    const subtotal = cart.reduce((acc, item) => acc + item.selling_price * item.cart_quantity, 0);
+    const gst = subtotal * 0.18;
+    // Assuming discount is stored in POS store, if not, we can calculate or get it.
+    // Wait, total and advancePaid are known.
+    const discountAmount = (subtotal + gst) - total;
+
+    const orderData = {
+      customer_id: selectedCustomer.id,
+      subtotal: subtotal,
+      discount: discountAmount,
+      gst_amount: gst,
+      total_amount: total,
+      advance_paid: advancePaid,
+      balance_due: balance
+    };
+
+    const items = cart.map(item => ({
+      inventory_id: item.id,
+      quantity: item.cart_quantity,
+      unit_price: item.selling_price,
+      total_price: item.selling_price * item.cart_quantity
+    }));
+
+    const result = await createOrder(orderData, items);
+    
+    setIsProcessing(false);
+    
+    if (result?.error) {
+      alert(result.error);
+    } else if (result?.data) {
+      setOrderId(result.data.id);
       setIsSuccess(true);
-    }, 1500);
+    }
   };
 
   const handleDone = () => {
@@ -49,7 +87,7 @@ export function CheckoutModal({ open, onOpenChange, total }: CheckoutModalProps)
           </DialogDescription>
           <div className="flex space-x-4 w-full">
             <Button className="flex-1" variant="outline" onClick={handleDone}>New Sale</Button>
-            <Button className="flex-1" onClick={() => {}}>Print Invoice</Button>
+            <Button className="flex-1" onClick={() => router.push(`/orders/${orderId}/invoice`)}>Print Invoice</Button>
           </div>
         </DialogContent>
       </Dialog>
