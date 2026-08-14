@@ -62,7 +62,7 @@ export default function PrescriptionClient({ prescription }: { prescription: any
                 <Eye className="w-6 h-6 text-black" />
                 <div className="flex flex-col">
                   <span>Amritsar Eye Clinic</span>
-                  <span className="text-xs font-normal text-gray-500 mt-1">Shahheed Udham Singh Nagar Main Bazar Street No.3</span>
+                  <span className="text-xs font-normal text-gray-500 mt-1">Shaheed Udham Singh Nagar Main Bazar Street No.3</span>
                   <span className="text-xs font-normal text-gray-500">Phone: 9915930068, 7340710332</span>
                 </div>
               </CardTitle>
@@ -134,29 +134,29 @@ export default function PrescriptionClient({ prescription }: { prescription: any
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                 <p className="text-xs font-bold text-gray-500 uppercase">Remarks</p>
-                 <p className="font-medium mt-1">{prescription.remarks || "No remarks."}</p>
+                <p className="text-xs font-bold text-gray-500 uppercase">Remarks</p>
+                <p className="font-medium mt-1">{prescription.remarks || "No remarks."}</p>
               </div>
               <div className="text-right">
-                 <p className="text-xs font-bold text-gray-500 uppercase">Price</p>
-                 <p className="font-medium mt-1 text-lg">₹{prescription.price || "0.00"}</p>
+                <p className="text-xs font-bold text-gray-500 uppercase">Price</p>
+                <p className="font-medium mt-1 text-lg">₹{prescription.price || "0.00"}</p>
               </div>
             </div>
 
             <div className="pt-8 space-y-4">
-               <div className="bg-gray-100 p-4 rounded-lg border border-black text-center text-sm space-y-1">
-                 <p className="font-semibold text-primary">A routine eye examination is recommended after 6 months to monitor your vision, detect any changes early, and maintain good eye health.</p>
-               </div>
-               
-               <div className="text-xs text-gray-600 space-y-1 border-t border-gray-300 pt-4">
-                 <p className="font-bold uppercase mb-2">Eye Care Habits for Safe Vision:</p>
-                 <ul className="list-disc pl-4 space-y-1">
-                   <li>Take regular screen breaks using the 20-20-20 rule (Every 20 mins, look 20 ft away for 20 secs).</li>
-                   <li>Wear UV protection sunglasses when outdoors.</li>
-                   <li>Maintain a healthy diet rich in leafy greens and omega-3s.</li>
-                   <li>Avoid rubbing your eyes and ensure proper lighting while reading.</li>
-                 </ul>
-               </div>
+              <div className="bg-gray-100 p-4 rounded-lg border border-black text-center text-sm space-y-1">
+                <p className="font-semibold text-primary">A routine eye examination is recommended after 6 months to monitor your vision, detect any changes early, and maintain good eye health.</p>
+              </div>
+
+              <div className="text-xs text-gray-600 space-y-1 border-t border-gray-300 pt-4">
+                <p className="font-bold uppercase mb-2">Eye Care Habits for Safe Vision:</p>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li>Take regular screen breaks using the 20-20-20 rule (Every 20 mins, look 20 ft away for 20 secs).</li>
+                  <li>Wear UV protection sunglasses when outdoors.</li>
+                  <li>Maintain a healthy diet rich in leafy greens and omega-3s.</li>
+                  <li>Avoid rubbing your eyes and ensure proper lighting while reading.</li>
+                </ul>
+              </div>
             </div>
             <div className="pt-8 text-center">
               <p className="text-xl font-bold tracking-tight italic text-primary mt-4">
