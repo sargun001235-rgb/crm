@@ -31,7 +31,12 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Customers</h1>
+        <div className="flex items-center space-x-3">
+          <h1 className="text-3xl font-bold tracking-tight">Customers</h1>
+          <span className="bg-primary/10 text-primary font-semibold text-sm px-3 py-1 rounded-full">
+            {customers.length} Total
+          </span>
+        </div>
         <Link href="/customers/new" className={buttonVariants({ variant: "default" })}>
           <Plus className="mr-2 h-4 w-4" />
           New Customer
@@ -62,8 +67,8 @@ export default async function CustomersPage({ searchParams }: { searchParams: Pr
                 </TableCell>
               </TableRow>
             ) : (
-              customers.map((customer) => (
-                <CustomerRowWithPrescriptions key={customer.id} customer={customer} />
+              customers.map((customer, index) => (
+                <CustomerRowWithPrescriptions key={customer.id} customer={customer} index={index} />
               ))
             )}
           </TableBody>

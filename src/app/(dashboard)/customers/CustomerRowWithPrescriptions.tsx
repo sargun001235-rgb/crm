@@ -8,7 +8,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { DeleteButton } from "@/components/ui/DeleteButton";
 import { deleteCustomer } from "./actions";
 
-export function CustomerRowWithPrescriptions({ customer }: { customer: any }) {
+export function CustomerRowWithPrescriptions({ customer, index }: { customer: any; index: number }) {
   const [expanded, setExpanded] = useState(false);
 
   // Sort prescriptions descending by created_at
@@ -18,6 +18,7 @@ export function CustomerRowWithPrescriptions({ customer }: { customer: any }) {
     <>
       <TableRow key={customer.id}>
         <TableCell className="font-medium flex items-center space-x-2">
+          <span className="text-muted-foreground w-6 text-sm">{index + 1}.</span>
           <Button variant="ghost" size="sm" className="p-0 h-6 w-6" onClick={() => setExpanded(!expanded)}>
             {expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
           </Button>
